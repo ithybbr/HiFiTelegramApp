@@ -10,7 +10,7 @@ public class ArtistsService
     // and more consistent
     private const string ArtistsPath = "/Resources/performers.txt";
     private const string SongsPath = "/Resources/performers_title_id.json";
-    
+    private const string DownloadedIdsPath = "/Resources/downloaded_id.txt";
     public ArtistsService()
     {
         var result = GetArtists();
@@ -47,6 +47,53 @@ public class ArtistsService
             SongId = s.Values<int>().First(),
         });
         return songsModel.ToList();
+    }
+
+    public Task AddToFavoriteArtists(string artist)
+    {
+        try
+        {
+            var json = File.ReadAllText(SongsPath);
+
+            var obj = JObject.Parse(json);
+            obj[artist]!["~Favorite"] = true;
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            return Task.FromException(ex);
+        }
+    }
+
+    public static Task AddToFavoriteSongs(string artist, string song)
+    {
+        throw new NotImplementedException();
+    }
+    public static Task RemoveFromFavoriteArtists(string artist)
+    {
+        throw  new NotImplementedException();
+    }
+    //Run a download script and when it finishes return download finished notification maybe
+    public async Task Download(int songId)
+    {
+        throw new NotImplementedException();
+    }
+    public Task AddToDownloads(int songId)
+    {
+        try
+        {
+            File.AppendAllText(DownloadedIdsPath, songId.ToString());
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            return Task.FromException(ex);
+        }
+    }
+
+    public Task RemoveFromDownloads(int songId)
+    {
+        throw new NotImplementedException();
     }
     public List<string> Artists { get; init; }
 }

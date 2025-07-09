@@ -25,5 +25,18 @@ namespace HiFiTelegramApp.Controllers
         {
             return View(this._artistsService.GetSongs(artist));
         }
+
+        public IActionResult AddToFavoriteArtists(string artist)
+        {
+            try
+            {
+                this._artistsService.AddToFavoriteArtists(artist);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }
