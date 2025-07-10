@@ -6,8 +6,12 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome home</h1>
-    @foreach (var artist in Model)
-    {
-        <a asp-controller="Home" asp-action="Artist" asp-route-name="@artist">@artist</a>
-    }
+    <ul class="list-group">
+        @foreach (var artist in Model)
+        {
+            <li class="list-group-item">
+                <a asp-controller="Home" asp-action="Artist" asp-route-artist="@artist">@artist</a>
+            </li>
+        }
+    </ul>
 </div>

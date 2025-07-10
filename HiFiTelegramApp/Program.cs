@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 // Use Electron.NET integration.  
 builder.WebHost.UseElectron(args); // Ensure Electron.NET is installed and referenced.  
 builder.Services.AddElectron();
-
+builder.Services.AddSingleton<HiFiTelegramApp.Services.ArtistsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.  
@@ -29,7 +29,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
    name: "default",
-   pattern: "{controller=Home}/{action=Index}/{id?}");
+   pattern: "{controller=Home}/{action=Index}/{artist?}");
 
 await app.StartAsync();
 var browerWindowOptions = new BrowserWindowOptions

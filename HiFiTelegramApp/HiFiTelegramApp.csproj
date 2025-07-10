@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ElectronNET.API" Version="23.6.2" />
+    <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">
@@ -14,6 +15,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Downloads\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
+    <ItemGroup>
+	    <None Include="Resources\performers.txt">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </None>
+		<None Include="Resources\performer_title_id.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\downloaded_id.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Utilities/download_script.py">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+    </ItemGroup>
 </Project>
