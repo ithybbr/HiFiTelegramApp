@@ -18,11 +18,23 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
-            return View(this._artistsService.Artists);
+            var artists = this._artistsService.Artists;
+            if (artists is null || !artists.Any())
+            {
+                _logger.LogError("Artists list is empty or null.");
+                return View();
+            }
+            return View(artists);
         }
         [HttpGet("{artist}")]
         public IActionResult Artist(string artist)
         {
+            var songs = this._artistsService.GetSongs(artist);
+            if (songs is null || songs.Count == 0)
+            {
+                _logger.LogError($"No songs found for artist: {artist}");
+                return NotFound($"No songs found for artist: {artist}");
+            }
             return View(this._artistsService.GetSongs(artist));
         }
 
@@ -30,7 +42,7 @@ namespace HiFiTelegramApp.Controllers
         {
             try
             {
-                this._artistsService.AddToFavoriteArtists(artist);
+                this._artistsService.AddToFavoriteMarkArtists(artist);
                 return StatusCode(201);
             }
             catch (Exception ex)

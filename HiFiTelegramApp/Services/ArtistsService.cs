@@ -9,55 +9,59 @@ public class ArtistsService
 {
     //I think it will be better to drop artistspath cuz songs looks better and less files to keep
     // and more consistent
-    private const string ArtistsPath = "/Resources/performers.txt";
-    private const string SongsPath = "/Resources/performers_title_id.json";
-    private const string DownloadedIdsPath = "/Resources/downloaded_id.txt";
-    private readonly string _downloadsPath = "/Downloads/";
-    private readonly string _scriptPath = "/Utilities/download_script.py";
+    private readonly IWebHostEnvironment _env;
     // will have to make it env variable probably
     private readonly string _pythonDdlPath = @"C:\Users\xxx\AppData\Local\Programs\Python\Python310\python.exe";
-    public ArtistsService()
+    public ArtistsService(IWebHostEnvironment env)
     {
+        _env = env;
         var result = GetArtists();
-        this.Artists = result.ToList();
+        this.Artists = [.. result];
     }
     private IReadOnlyCollection<string> GetArtists()
     {
+        var ArtistsPath = Path.Combine(_env.ContentRootPath, "Resources", "performers.txt");
         using var reader = new StreamReader(ArtistsPath);
         var performer = reader.ReadLine()!;
+        Console.WriteLine($"First performer: {performer}");
         List<string> result = [];
-        while (string.IsNullOrWhiteSpace(performer))
+        while (!string.IsNullOrWhiteSpace(performer))
         {
             result.Add(performer);
             performer = reader.ReadLine()!;
         }
-        
         return result;
     }
 
     public IReadOnlyCollection<SongModel> GetSongs(string artist)
     {
-        var json = File.ReadAllText(SongsPath);
+        Console.WriteLine("I am here");
+        var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
+        // 2) read & parse
+        var raw = File.ReadAllText(SongsPath);
+        var root = JObject.Parse(raw);
+        var block = root[artist] as JObject
+                 ?? throw new InvalidOperationException($"Artist '{artist}' not found.");
 
-        var obj = JObject.Parse(json);
-        var songs = obj[artist];
-        if (songs is null)
-            throw new InvalidOperationException();
-        var i = 0;
-        var songsModel = songs.Select(s => new SongModel
-        {
-            Id = ++i,
-            Artist = artist,
-            Name = s.Value<string>() ?? string.Empty,
-            SongId = s.Values<int>().First(),
-        });
-        return songsModel.ToList();
+        // 3) enumerate each JProperty (key = song name, value = id)
+        var list = block.Properties()
+            .Select((prop, idx) => new SongModel
+            {
+                Id = idx + 1,
+                Artist = artist,
+                Name = prop.Name,
+                SongId = prop.Value.Value<int>()
+            })
+            .ToList();
+        Console.WriteLine($"Found {list.Count} songs for artist: {artist}");
+        return list;
     }
 
     public Task AddToFavoriteMarkArtists(string artist)
     {
         try
         {
+            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
             var json = File.ReadAllText(SongsPath);
 
             var obj = JObject.Parse(json);
@@ -70,10 +74,11 @@ public class ArtistsService
         }
     }
 
-    public static Task RemoveFromFavoriteMarkArtists(string artist)
+    public Task RemoveFromFavoriteMarkArtists(string artist)
     {
         try
         {
+            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
             var json = File.ReadAllText(SongsPath);
 
             var obj = JObject.Parse(json);
@@ -86,10 +91,11 @@ public class ArtistsService
         }
     }
     
-    public static Task AddToFavoriteSongs(string artist, string song, int songId)
+    public Task AddToFavoriteSongs(string artist, string song, int songId)
     {
         try
         {
+            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
             var json = File.ReadAllText(SongsPath);
 
             var obj = JObject.Parse(json);
@@ -106,6 +112,7 @@ public class ArtistsService
     {
         try
         {
+            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
             var json = File.ReadAllText(SongsPath);
 
             var obj = JObject.Parse(json);
@@ -132,18 +139,20 @@ public class ArtistsService
         // sys.path.append(Path.Combine(this.scriptPath));
         Runtime.PythonDLL = this._pythonDdlPath;
         PythonEngine.Initialize();
+        var scriptPath = Path.Combine(_env.ContentRootPath, "Utilities", "download_script.py");
         using (Py.GIL())
         {
-            var pythonScript = Py.Import(this._scriptPath);
+            var pythonScript = Py.Import(scriptPath);
             var message = new PyString(songId.ToString());
-            var result = await pythonScript.InvokeMethod("start_up", new PyObject[] { message });
+            var result = pythonScript.InvokeMethod("start_up", new PyObject[] { message });
             await AddToDownloads(songId);
         }
     }
-    private static Task AddToDownloads(int songId)
+    private Task AddToDownloads(int songId)
     {
         try
         {
+            var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_id.txt");
             File.AppendAllText(DownloadedIdsPath, songId.ToString());
             return Task.CompletedTask;
         }
@@ -157,7 +166,8 @@ public class ArtistsService
     {
         try
         {
-            Directory.EnumerateFiles(this._downloadsPath, $"*{songId}*").ToList().ForEach(File.Delete);
+            var downloadsPath = Path.Combine(_env.ContentRootPath, "Downloads");
+            Directory.EnumerateFiles(downloadsPath, $"*{songId}*").ToList().ForEach(File.Delete);
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -169,6 +179,7 @@ public class ArtistsService
     {
         try
         {
+            var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_id.txt");
             var content = File.ReadAllText(DownloadedIdsPath);
             content = content.Replace(songId.ToString(), string.Empty);
             File.WriteAllText(DownloadedIdsPath, content);

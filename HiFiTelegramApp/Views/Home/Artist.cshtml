@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<SongModel>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Artist Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome home</h1>
-    @foreach (var artist in Model)
-    {
-        <a asp-controller="Home" asp-action="Artist" asp-route-name="@artist">@artist</a>
-    }
+    <h1 class="display-4">Artist</h1>
+    <ul class="list-group">
+        @foreach (var song in Model)
+        {
+            <li class="list-group-item">
+                <a asp-controller="Home" asp-action="Artist" asp-route-name="@song.SongId">@song.Name</a>
+            </li>
+        }
+    </ul>
 </div>
