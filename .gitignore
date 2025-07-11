@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.idea/.idea.HiFiTelegramApp/.idea/.gitignore
+/.idea/.idea.HiFiTelegramApp/.idea/encodings.xml
+/.idea/.idea.HiFiTelegramApp/.idea/indexLayout.xml
+/HiFiTelegramApp/Resources/performer_title_id.json
+/HiFiTelegramApp/Resources/performers.txt
+/.idea/.idea.HiFiTelegramApp/.idea/dictionaries/project.xml
+/.idea/.idea.HiFiTelegramApp/.idea/vcs.xml
