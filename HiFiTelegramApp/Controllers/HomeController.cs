@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HiFiTelegramApp.Controllers
 {
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -35,6 +36,7 @@ namespace HiFiTelegramApp.Controllers
                 _logger.LogError($"No songs found for artist: {artist}");
                 return NotFound($"No songs found for artist: {artist}");
             }
+            ViewData["Artist"] = artist;
             return View(this._artistsService.GetSongs(artist));
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HiFiTelegramApp.Controllers
 {
+    [Route("[controller]")]
     public class FavoriteController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,6 +19,7 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
+            Console.WriteLine("FavoriteController Index called");
             return View();
         }
         [HttpPost("{artist}")]
@@ -26,7 +28,7 @@ namespace HiFiTelegramApp.Controllers
             try
             {
                 this._favoriteService.AddToFavoriteMarkArtists(artist);
-                return StatusCode(201);
+                return this.RedirectToAction(nameof(HomeController.Artist), artist);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HiFiTelegramApp.Controllers
 {
+    [Route("[controller]")]
     public class DownloadController : Controller
     {
         private readonly ILogger<HomeController> _logger;

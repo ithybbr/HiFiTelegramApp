@@ -18,18 +18,18 @@ public class ArtistsService
         var result = GetArtists();
         this.Artists = [.. result];
     }
-    private IReadOnlyCollection<string> GetArtists()
+    private List<string> GetArtists()
     {
         var ArtistsPath = Path.Combine(_env.ContentRootPath, "Resources", "performers.txt");
         using var reader = new StreamReader(ArtistsPath);
         var performer = reader.ReadLine()!;
-        Console.WriteLine($"First performer: {performer}");
         List<string> result = [];
         while (!string.IsNullOrWhiteSpace(performer))
         {
             result.Add(performer);
             performer = reader.ReadLine()!;
         }
+        reader.Close();
         return result;
     }
 
@@ -42,7 +42,6 @@ public class ArtistsService
         var root = JObject.Parse(raw);
         var block = root[artist] as JObject
                  ?? throw new InvalidOperationException($"Artist '{artist}' not found.");
-
         // 3) enumerate each JProperty (key = song name, value = id)
         var list = block.Properties()
             .Select((prop, idx) => new SongModel

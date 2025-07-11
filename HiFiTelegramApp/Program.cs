@@ -10,6 +10,8 @@ builder.Services.AddControllersWithViews();
 builder.WebHost.UseElectron(args); // Ensure Electron.NET is installed and referenced.  
 builder.Services.AddElectron();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.ArtistsService>();
+builder.Services.AddSingleton<HiFiTelegramApp.Services.FavoriteService>();
+builder.Services.AddSingleton<HiFiTelegramApp.Services.DownloadService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.  
@@ -30,6 +32,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
    name: "default",
    pattern: "{controller=Home}/{action=Index}/{artist?}");
+
+app.UseEndpoints(endpoints =>
+{
+    _ = endpoints.MapGet("/", context =>
+    {
+        context.Response.Redirect("/Home");
+        return Task.CompletedTask;
+    });
+});
 
 await app.StartAsync();
 var browerWindowOptions = new BrowserWindowOptions

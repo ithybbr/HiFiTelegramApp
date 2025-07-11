@@ -12,6 +12,7 @@ public class FavoriteService
     }
      public Task AddToFavoriteMarkArtists(string artist)
     {
+        Console.WriteLine($"Adding {artist} to favorites");
         try
         {
             var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
@@ -19,6 +20,7 @@ public class FavoriteService
 
             var obj = JObject.Parse(json);
             obj[artist]!["~Favorite"] = true;
+            Console.WriteLine($"HERERERERE");
             return Task.CompletedTask;
         }
         catch (Exception ex)

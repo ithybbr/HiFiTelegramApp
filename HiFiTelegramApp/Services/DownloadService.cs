@@ -24,7 +24,7 @@ public class DownloadService
         {
             var pythonScript = Py.Import(scriptPath);
             var message = new PyString(songId.ToString());
-            var result = pythonScript.InvokeMethod("start_up", new PyObject[] { message });
+            var result = pythonScript.InvokeMethod("start_up", [message]);
             await AddToDownloads(songId, result);
         }
     }
