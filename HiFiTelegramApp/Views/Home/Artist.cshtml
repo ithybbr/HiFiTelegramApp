@@ -11,6 +11,8 @@
         {
             <li class="list-group-item">
                 <a asp-controller="Home" asp-action="Artist" asp-route-name="@song.SongId">@song.Name</a>
+                <a asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-name="@song.Artist">Add to favorites</a>
+                <a asp-controller="Favorite" asp-action="RemoveFromFavoriteArtists" asp-route-name="remove/@song.Artist">Remove from favorites</a>
             </li>
         }
     </ul>

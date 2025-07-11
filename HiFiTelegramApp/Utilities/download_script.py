@@ -15,6 +15,8 @@ def start_up(id):
     app = Client("hifimusic_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
     ids = []
     channel_id = os.environ['CHANNEL_ID']
-    app.run(download_song(id)    
-async def download_song(id):
+    return app.run(download_song(app, id) #idk if it would work or how to do it better
+async def download_song(app, id):
+        file = await app.download_media(message = f"{id}")
+        return file.name
     
