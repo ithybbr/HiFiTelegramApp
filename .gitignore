@@ -368,3 +368,5 @@ FodyWeavers.xsd
 /HiFiTelegramApp/Resources/performers.txt
 /.idea/.idea.HiFiTelegramApp/.idea/dictionaries/project.xml
 /.idea/.idea.HiFiTelegramApp/.idea/vcs.xml
+/HiFiTelegramApp/Downloads
+/HiFiTelegramApp/python
