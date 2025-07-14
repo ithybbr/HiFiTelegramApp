@@ -1,7 +1,34 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<AudioModel>
+@{
+    ViewData["Title"] = "Downloads";
 }
 
 <div class="text-center">
     <h1 class="display-4">Downloads</h1>
+</div>
+<div class="text-center">
+    <h1 class="display-4">artist</h1>
+    <ul class="list-group">
+        @foreach (var audio in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <audio controls>
+                        <source src="@audio.Path" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="d-flex gap-2">
+                    <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@audio.Artist">
+                        <button type="submit" class="btn btn-light">Add to favorites</button>
+                    </form>
+                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteArtists" asp-route-artist="remove/@audio.Artist">
+                        <button type="submit" class="btn btn-light">Remove from favorites</button>
+                    </form>
+                    <form asp-controller="Download" asp-action="Delete" asp-route-artist="remove/@audio.SongId">
+                        <button type="submit" class="btn btn-light">Delete</button>
+                    </form>
+                </div>
+            </li>
+        }
+    </ul>
 </div>
