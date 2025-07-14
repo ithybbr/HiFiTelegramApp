@@ -9,18 +9,34 @@ public class FavoriteService
     public FavoriteService(IWebHostEnvironment env)
     {
         this._env = env;
+        var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.txt");
+        this.Favorites = [.. File.ReadAllLines(favoritesPath)];
+    }
+    public List<string> GetFavoriteArtists()
+    {
+        try
+        {
+            return this.Favorites;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading favorites: {ex.Message}");
+            return [];
+        }
     }
      public Task AddToFavoriteMarkArtists(string artist)
     {
         Console.WriteLine($"Adding {artist} to favorites");
         try
         {
-            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
-            var json = File.ReadAllText(SongsPath);
-
-            var obj = JObject.Parse(json);
-            obj[artist]!["~Favorite"] = true;
-            Console.WriteLine($"HERERERERE");
+            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.txt");
+            if(this.Favorites.Contains(artist))
+            {
+                Console.WriteLine($"Artist {artist} is already in favorites");
+                return Task.CompletedTask;
+            }
+            File.AppendAllLines(favoritesPath, [artist]);
+            this.Favorites.Add(artist);
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -86,4 +102,6 @@ public class FavoriteService
             return Task.FromException(ex);
         }
     }
+
+    private List<string> Favorites { get; set; } = [];
 }

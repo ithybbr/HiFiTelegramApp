@@ -1,7 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<string>
+@{
+    ViewData["Title"] = "Favorites";
 }
 
 <div class="text-center">
     <h1 class="display-4">Favorites</h1>
+    <ul class="list-group">
+        @foreach (var artist in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a asp-controller="Home" asp-action="Artist" asp-route-artist="@artist">@artist</a>
+                <div class="d-flex gap-2">
+                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteArtists" asp-route-artist="@artist">
+                        <button type="submit" class="btn btn-light">Remove from favorites</button>
+                    </form>
+                </div>
+            </li>
+        }
+    </ul>
 </div>

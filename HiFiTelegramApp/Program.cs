@@ -12,6 +12,7 @@ builder.Services.AddElectron();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.ArtistsService>();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.FavoriteService>();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.DownloadService>();
+DotNetEnv.Env.Load();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.  
@@ -23,6 +24,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -43,9 +45,9 @@ app.UseEndpoints(endpoints =>
 });
 
 await app.StartAsync();
-var browerWindowOptions = new BrowserWindowOptions
-{
-    AutoHideMenuBar = true,
-};
-await Electron.WindowManager.CreateWindowAsync(browerWindowOptions);
+//var browerWindowOptions = new BrowserWindowOptions
+//{
+//    AutoHideMenuBar = true,
+//};
+//await Electron.WindowManager.CreateWindowAsync(browerWindowOptions);
 app.WaitForShutdown();

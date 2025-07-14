@@ -19,23 +19,24 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
-            Console.WriteLine("FavoriteController Index called");
-            return View();
+            var favoriteArtists = this._favoriteService.GetFavoriteArtists();
+            return View(favoriteArtists);
         }
-        [HttpPost("{artist}")]
+        [HttpPost("add")]
         public IActionResult AddToFavoriteArtists(string artist)
         {
             try
             {
+                Console.WriteLine($"Adding {artist} to favorites");
                 this._favoriteService.AddToFavoriteMarkArtists(artist);
-                return this.RedirectToAction(nameof(HomeController.Artist), artist);
+                return this.RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
         }
-        [HttpPost("remove/{artist}")]
+        [HttpPost("remove")]
         public IActionResult RemoveFromFavoriteArtists(string artist)
         {
             try

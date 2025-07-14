@@ -5,7 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Resources\downloaded_songs.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="ElectronNET.API" Version="23.6.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
     <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
   <ItemGroup>
@@ -13,21 +18,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Downloads\" />
-  </ItemGroup>
     <ItemGroup>
 	    <None Include="Resources\performers.txt">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </None>
+		<None Include="Resources\favorites.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Include="Resources\performer_title_id.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Include="Resources\downloaded_id.txt">
+		<None Include="Resources\downloaded_songs.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Include="Utilities/download_script.py">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<None Include="wwwroot\downloads\01.flac" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Utilities\downloadScript.py">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 </Project>
