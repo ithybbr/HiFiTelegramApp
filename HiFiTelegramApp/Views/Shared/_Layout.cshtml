@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - HiFiTelegramApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HiFiTelegramApp.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -34,12 +33,14 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        @* <main role="main" class="pb-3"> *@
+        @*     @RenderBody() *@
+        @* </main> *@
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/aurora.js"></script> @*npm install av *@
+    <script src="~/lib/flac.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
