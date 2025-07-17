@@ -20,3 +20,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+.player {
+    visibility: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.player button {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+
+.sticky-player button.play::after {
+    content: "Play";
+}
+
+.sticky-player button.pause::after {
+    content: "Pause";
+}

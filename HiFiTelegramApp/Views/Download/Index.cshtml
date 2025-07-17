@@ -1,28 +1,19 @@
 ﻿@model IEnumerable<AudioModel>
 @{
     ViewData["Title"] = "Downloads";
+    var i = 0;
 }
 <div class="text-center">
     <h1 class="display-4">Downloads</h1>
 </div>
 <div class="text-center">
     <h1 class="display-4">artist</h1>
-    <div id="player">
-		<button id="play">Play</button>
-		<button id="pause">Pause</button>
-        <audio controls>
-            <source src="/downloads/2.mp3" type="audio/mp3">
-        </audio>
-    </div>
     <ul class="list-group">
         @foreach (var audio in Model)
         {
-            @audio.SongId @audio.Path
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <audio controls>
-                        <source src="@audio.Path" type="audio/flac">
-                    </audio>
+                <div class="audio-data-@i" onclick="audioPlayer('@audio.Path', @i)">
+					@audio.Artist - @audio.Name
                 </div>
                 <div class="d-flex gap-2">
                     <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@audio.Artist">
@@ -36,26 +27,23 @@
                     </form>
                 </div>
             </li>
+			i++;
         }
     </ul>
 </div>
 @section Scripts{
 <script>
-	$(document).ready(function () {
-		var player = document.getElementById("player");
-		var play = document.getElementById("play");
-		var pause = document.getElementById("pause");
-		play.addEventListener("click", function () {
-            var audio = new Howl({
-                src: ['/downloads/1.flac'],
-                html5: true
-            });
+	function audioPlayer(src, i){
+        var audio = new Howl({
+            src: [src],
+            html5: true
+        });
+        if(audio.playing()){
+			audio.stop();
+        }
+        else{
 			audio.play();
-		});
-		pause.addEventListener("click", function () {
-			audio.pause();
-		});
-		player.appendChild(audio);
-	});
+        }
+	}
 </script>
 }
