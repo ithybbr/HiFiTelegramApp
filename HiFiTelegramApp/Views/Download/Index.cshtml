@@ -43,17 +43,18 @@
 <script>
 	$(document).ready(function () {
 		var player = document.getElementById("player");
-                var audio = new Audio("/downloads/01.flac");
-        audio.play();
 		var play = document.getElementById("play");
 		var pause = document.getElementById("pause");
 		play.addEventListener("click", function () {
+            var audio = new Howl({
+                src: ['/downloads/1.flac'],
+                html5: true
+            });
 			audio.play();
 		});
 		pause.addEventListener("click", function () {
 			audio.pause();
 		});
-		player.appendChild(audio);
 	});
 </script>
 }

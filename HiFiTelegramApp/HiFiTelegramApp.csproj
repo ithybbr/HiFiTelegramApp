@@ -17,6 +17,10 @@
     <Content Update="electron.manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\lib\av\src\aurora.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
     <ItemGroup>
 	    <None Include="Resources\performers.txt">
@@ -31,7 +35,7 @@
 		<None Include="Resources\downloaded_songs.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Include="wwwroot\downloads\01.flac" />
+		<None Include="wwwroot\downloads\1.flac" />
     </ItemGroup>
     <ItemGroup>
       <None Update="Utilities\downloadScript.py">

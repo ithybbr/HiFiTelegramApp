@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "av": "^0.4.9",
+    "flac": "^0.3.0",
+    "howler": "^2.2.4"
+  },
+  "name": "hifitelegramapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "eslint": "^9.31.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

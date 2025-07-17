@@ -1,4 +1,4 @@
-﻿loadAjax = (url) =>{
+﻿function loadAjax (url){
     $.ajax({
         url: url,
         type: 'GET',
@@ -6,4 +6,7 @@
             $('#container').html(data);
         }
     })
+}
+function bruh() {
+    alert("Bruh");
 }
