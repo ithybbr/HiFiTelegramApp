@@ -21,23 +21,29 @@ body {
   margin-bottom: 60px;
 }
 .player {
-    visibility: hidden;
+    visibility: visible;
     position: fixed;
-    bottom: 0;
+    bottom: 130px;
     left: 0;
     width: 100%;
 }
 .player button {
-    color: white;
+/*    color: white;
     background: none;
     border: none;
-    font-size: 16px;
+    font-size: 16px;*/
 }
 
-.sticky-player button.play::after {
+.player button.play::after {
     content: "Play";
 }
 
-.sticky-player button.pause::after {
+.player button.pause::after {
     content: "Pause";
+}
+.player input{
+    width: 30%;
+}
+.nav-link:hover {
+    cursor: pointer;
 }

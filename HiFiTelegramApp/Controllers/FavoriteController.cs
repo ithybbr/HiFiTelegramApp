@@ -20,7 +20,7 @@ namespace HiFiTelegramApp.Controllers
         public IActionResult Index()
         {
             var favoriteArtists = this._favoriteService.GetFavoriteArtists();
-            return View(favoriteArtists);
+            return PartialView(favoriteArtists);
         }
         [HttpPost("add")]
         public IActionResult AddToFavoriteArtists(string artist)

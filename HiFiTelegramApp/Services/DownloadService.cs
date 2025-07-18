@@ -1,5 +1,7 @@
 ﻿using System.Net;
+using System.Text.Json;
 using ElectronNET.API;
+using HiFiTelegramApp.Models;
 using Python.Runtime;
 
 namespace HiFiTelegramApp.Services;
@@ -27,13 +29,18 @@ public class DownloadService
             PythonEngine.BeginAllowThreads();
         }
     }
-    public List<string> GetDownloads()
+    public List<AudioModel> GetDownloads()
     {
         var downloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
-        var list = File.ReadAllLines(downloadedIdsPath).ToList();
-        return list;
+        var jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
+        Console.WriteLine($"Read JSON content: {jsonContent}");
+        var list = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent); // Deserialize the string content
+        if (list is null)
+        {
+            Console.WriteLine("No downloaded songs found or deserialization failed.");
+        }
+        return list ?? [];
     }
-        //Run a download script and when it finishes return download finished notification maybe
     public async Task Download(int songId)
     {
         Console.WriteLine($"Download request for songId: {songId}");
@@ -59,7 +66,18 @@ public class DownloadService
         try
         {
             var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
-            File.AppendAllText(DownloadedIdsPath, $"~{songId}~{result}");
+            var trimmed = result.ToString()!.Replace($"{_env.ContentRootPath}\\wwwroot", "").Replace('\\','/');
+            Console.WriteLine($"Adding songId {songId} with path {trimmed} to downloads.");
+            Console.WriteLine($"Result: {result}");
+            var audioModel = new AudioModel
+            {
+                SongId = songId,
+                Path = trimmed,
+                Artist = "Unknown Artist",
+                Name = $"Song {songId}"
+            };
+            var jsonEntry = JsonSerializer.Serialize(audioModel);
+            File.AppendAllText(DownloadedIdsPath, jsonEntry);
             return Task.CompletedTask;
         }
         catch (Exception ex)

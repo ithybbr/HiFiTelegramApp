@@ -19,13 +19,18 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+        [HttpGet("artists")]
+        public IActionResult ArtistsCollection()
+        {
             var artists = this._artistsService.Artists;
             if (artists is null || !artists.Any())
             {
                 _logger.LogError("Artists list is empty or null.");
-                return View();
+                return PartialView();
             }
-            return View(artists);
+            return PartialView(artists);
         }
         [HttpGet("{artist}")]
         public IActionResult Artist(string artist)
@@ -37,7 +42,7 @@ namespace HiFiTelegramApp.Controllers
                 return NotFound($"No songs found for artist: {artist}");
             }
             ViewData["Artist"] = artist;
-            return View(this._artistsService.GetSongs(artist));
+            return PartialView(this._artistsService.GetSongs(artist));
         }
     }
 }

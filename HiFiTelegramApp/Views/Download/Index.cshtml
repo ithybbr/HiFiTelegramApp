@@ -31,19 +31,3 @@
         }
     </ul>
 </div>
-@section Scripts{
-<script>
-	function audioPlayer(src, i){
-        var audio = new Howl({
-            src: [src],
-            html5: true
-        });
-        if(audio.playing()){
-			audio.stop();
-        }
-        else{
-			audio.play();
-        }
-	}
-</script>
-}

@@ -21,16 +21,10 @@ namespace HiFiTelegramApp.Controllers
             var list = _downloadService.GetDownloads();
             foreach (var song in list)
             {
-                Console.WriteLine($"Song: {song}");
+                Console.WriteLine($"Song: {song.Path}");
             }
-            var audioModels = list.Select(song => new AudioModel
-            {
-                SongId = int.Parse(song.Split('~')[1]),
-                Path = song.Split('~')[2],
-                Artist = "Unknown Artist" // Placeholder artist, replace with actual artist if available
-            }).ToList();
 
-            return View(audioModels);
+            return PartialView(list);
         }
         [HttpPost]
         public async Task<IActionResult> DownloadSong(string artist, int songId)

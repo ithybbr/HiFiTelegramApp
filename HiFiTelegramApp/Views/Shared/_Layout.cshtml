@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - HiFiTelegramApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <header>
@@ -19,20 +20,20 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <span class="nav-link text-dark" data-url="@Url.Action("ArtistsCollection", "Home")">Artists</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Favorite" asp-action="Index">Favorites</a>
+                            <span class="nav-link text-dark" data-url="@Url.Action("Index", "Favorite")">Favorites</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Download" asp-action="Index">Downloads</a>
+                            <span class="nav-link text-dark" data-url="@Url.Action("Index", "Download")">Downloads</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" id="append-ajax">
         
         <main role="main" class="pb-3">
             @RenderBody()
@@ -40,11 +41,12 @@
     </div>
     <footer>
         <div class="player">
-			<div class="container">
+			<div class="container-player">
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<h2>Audio Player</h2>
-						<button id="player-btn" class="btn btn-primary"></button>
+						<button id="player-btn" class="btn btn-primary pause"></button>
+                        <label for="customRange1" class="form-label"><i class="bi bi-volume-down" style="font-size:30px"></i></label>
+                        <input type="range" class="form-range" id="volume" value="50">
 					</div>
 				</div>
 			</div>

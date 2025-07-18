@@ -23,6 +23,6 @@ def start_up(message_id: int) -> str:
         # if you want to download a message from a channel:
         # add the chat_id: f"{channel_id}/{message_id}"
         message = app.get_messages("hifimusicfromtidal", message_id)
-        path = app.download_media(message)
+        path = app.download_media(message, file_name = "wwwroot/downloads/")
         return path
     
