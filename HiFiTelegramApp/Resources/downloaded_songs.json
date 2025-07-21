@@ -6,19 +6,19 @@
         "Artist": "$NOT"
     },
     {
-        "songId": 25887,
+        "SongId": 25887,
         "Path": "/downloads/2.flac",
         "Name": "#1 Stunna",
         "Artist": "$uicideboy$"
     },
     {
-        "songId": 25889,
+        "SongId": 25889,
         "Path": "/downloads/01 - $uicideboy$ - 7th or St. Tammany(Explicit).flac",
         "Name": "7th or St. Tammany",
         "Artist": "$uicideboy$"
     },
     {
-        "songId": 26027,
+        "SongId": 26027,
         "Path": "/downloads/06_$uicideboy$_100_Blunts_DJ_Phantazm_RemixExplicit.flac",
         "Name": "100 Blunts (DJ Phantazm Remix) (Explicit)",
         "Artist": "$uicideboy$"

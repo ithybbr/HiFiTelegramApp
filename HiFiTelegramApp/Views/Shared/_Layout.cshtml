@@ -42,18 +42,36 @@
     <footer>
         <div class="player">
 			<div class="container-player">
-				<div class="row">
-                    <div class="col-md-12 text-center">
-                        <button id="previous"> Previous </button>
-                        <button id="player-btn" class="btn btn-primary pause"></button>
-                        <button id="next"> Next </button>
-                        <label id="artist">Artist</label>
+                <div class="d-flex align-items-center">
+                    <div class="album-art"></div>
+                    <div class="track-info">
                         <label id="song">Song</label>
-                        <label id="time">0:00</label>
-                        <label for="customRange1" class="form-label"><i class="bi bi-volume-down" style="font-size:30px"></i></label>
-                        <input type="range" class="form-range" id="volume" value="50">
+                        <label id="artist">Artist</label>
+                    </div>
+                    <i class="fas fa-heart heart-icon"></i>
+                </div>
+                <div class="player-controls">
+                    <div class="control-buttons">
+                        <button id="previous" class="btn btn-secondary"> Previous </button>
+                        <button id="player-ps-btn" class="btn btn-primary ps pause"></button>
+                        <button id="next" class="btn btn-secondary"> Next </button>
                     </div>
 				</div>
+                <div class="progress-container">
+                    <label id="time">0:00</label>
+					<div class="col-md-12 text-center">
+                        <div class="progress-bar">
+                            <input type="range" class="form-range" id="progress" value="0">
+						</div>
+                    </div>
+                    <label id="duration">0:00</label>
+				</div>
+                <div class="right-controls">
+                    <div class="volume-container">
+                        <label for="customRange1" class="form-label"><i class="bi bi-volume-down" style="font-size:30px"></i></label>
+                        <input type="range" class="form-range" id="volume" value="25">
+                    </div>
+                </div>
 			</div>
         </div>
     </footer>

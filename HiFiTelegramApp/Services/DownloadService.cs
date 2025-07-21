@@ -12,11 +12,13 @@ public class DownloadService
     
     public DownloadService(IWebHostEnvironment env)
     {
-        var downloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
+        this._env = env;
+        var downloadedIdsPath = Path.Combine(this._env.ContentRootPath, "Resources", "downloaded_songs.json");
         var jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
         this.Downloads = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent) ?? []; // Deserialize the string content
+        Console.WriteLine($"Loaded downloads from {Downloads[0].Name}");
+
         this.IdsToSong = this.Downloads.ToDictionary(x => x.SongId, x => x);
-        this._env = env;
         var pythonHomeDir = Path.Combine(_env.ContentRootPath, "python");
         Runtime.PythonDLL = Path.Combine(pythonHomeDir, "python313.dll");
         var libFolder = Path.Combine(pythonHomeDir, "Lib");
