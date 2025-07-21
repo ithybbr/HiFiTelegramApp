@@ -19,16 +19,33 @@ function loadAjax(url) {
 }
 var audio;
 var id;
-function audioPlayer(src, i) {
+var volume = 0.5;
+var artistLabel;
+var songLabel;
+var timeLabel;
+// this thing will not work. have to fix it later.
+function audioPlayer(song) {
+    artistLabel.text(song.Artist);
+    songLabel.text(song.Name);
     audio = new Howl({
-        src: [src],
+        src: [song.Path],
         html5: true,
-        volume: 0.5
+        volume: volume
     });
     Howler.stop();
     id = audio.play();
+    updateTime();
+}
+function updateTime() {
+    while(audio.playing()) {
+        var time = audio.seek();
+        timeLabel.text(time);
+    }
 }
 document.addEventListener('DOMContentLoaded', () => {
+    artistLabel = document.querySelector('.player #artist');
+    songLabel = document.querySelector('.player #song');
+    timeLabel = document.querySelector('.player #time');
     document.querySelector('.player button')
         .addEventListener('click', function () {
             if (audio.playing()) {
@@ -40,11 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.classList.remove('play');
                 this.classList.add('pause');
                 audio.play();
+                updateTime();
             }
         });
     var vol = document.querySelector('.player .form-range');
     vol.addEventListener('change', function () {
-        audio.volume(this.value/100);
+        volume = this.value;
+        audio.volume(volume);
         console.log('Volume changed to:', this.value);
     });
 });

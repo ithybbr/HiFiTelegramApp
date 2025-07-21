@@ -12,6 +12,10 @@ public class DownloadService
     
     public DownloadService(IWebHostEnvironment env)
     {
+        var downloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
+        var jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
+        this.Downloads = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent) ?? []; // Deserialize the string content
+        this.IdsToSong = this.Downloads.ToDictionary(x => x.SongId, x => x);
         this._env = env;
         var pythonHomeDir = Path.Combine(_env.ContentRootPath, "python");
         Runtime.PythonDLL = Path.Combine(pythonHomeDir, "python313.dll");
@@ -31,17 +35,13 @@ public class DownloadService
     }
     public List<AudioModel> GetDownloads()
     {
-        var downloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
-        var jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
-        Console.WriteLine($"Read JSON content: {jsonContent}");
-        var list = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent); // Deserialize the string content
-        if (list is null)
-        {
-            Console.WriteLine("No downloaded songs found or deserialization failed.");
-        }
-        return list ?? [];
+        return this.Downloads ?? [];
     }
-    public async Task Download(int songId)
+    public AudioModel GetDownloadById(int songId)
+    {
+        return this.IdsToSong[songId];
+    }
+    public async Task Download(string artist, int songId)
     {
         Console.WriteLine($"Download request for songId: {songId}");
         using (Py.GIL())
@@ -58,10 +58,10 @@ public class DownloadService
             var message = new PyInt(songId);
             var result = pythonScript.InvokeMethod("start_up", [ message ]);
             Console.WriteLine($"Download result for songId {songId}: {result}");
-            await AddToDownloads(songId, result);
+            await AddToDownloads(artist, songId, result);
         }
     }
-    private Task AddToDownloads(int songId, PyObject result)
+    private Task AddToDownloads(string artist, int songId, PyObject result)
     {
         try
         {
@@ -73,7 +73,7 @@ public class DownloadService
             {
                 SongId = songId,
                 Path = trimmed,
-                Artist = "Unknown Artist",
+                Artist = artist,
                 Name = $"Song {songId}"
             };
             var jsonEntry = JsonSerializer.Serialize(audioModel);
@@ -114,4 +114,6 @@ public class DownloadService
             return Task.FromException(ex);
         }
     }
+    private List<AudioModel> Downloads { get; set; } = [];
+    private Dictionary<int, AudioModel> IdsToSong { get; set; } = [];
 }

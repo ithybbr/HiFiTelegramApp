@@ -30,7 +30,7 @@ namespace HiFiTelegramApp.Controllers
         public async Task<IActionResult> DownloadSong(string artist, int songId)
         {
             Console.WriteLine($"Download request for songId: {songId} by artist: {artist}");
-            await _downloadService.Download(songId);
+            await _downloadService.Download(artist, songId);
 
             return RedirectToAction("Artist", "Home", new { artist });
         }

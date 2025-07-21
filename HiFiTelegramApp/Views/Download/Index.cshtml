@@ -12,7 +12,7 @@
         @foreach (var audio in Model)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="audio-data-@i" onclick="audioPlayer('@audio.Path', @i)">
+                <div class="audio-data-@i" onclick="audioPlayer(@Html.Raw(audio))">
 					@audio.Artist - @audio.Name
                 </div>
                 <div class="d-flex gap-2">
