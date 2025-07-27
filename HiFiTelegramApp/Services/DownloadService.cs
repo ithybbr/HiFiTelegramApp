@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using ElectronNET.API;
 using HiFiTelegramApp.Models;
 using Python.Runtime;
@@ -71,15 +72,25 @@ public class DownloadService
             var trimmed = result.ToString()!.Replace($"{_env.ContentRootPath}\\wwwroot", "").Replace('\\','/');
             Console.WriteLine($"Adding songId {songId} with path {trimmed} to downloads.");
             Console.WriteLine($"Result: {result}");
-            var audioModel = new AudioModel
+            var text = File.ReadAllTextAsync(DownloadedIdsPath).Result;
+            var list = JsonSerializer.Deserialize<List<AudioModel>>(text)
+                       ?? [];
+
+            AudioModel audioModel = new AudioModel
             {
                 SongId = songId,
                 Path = trimmed,
                 Artist = artist,
                 Name = $"Song {songId}"
             };
-            var jsonEntry = JsonSerializer.Serialize(audioModel);
-            File.AppendAllText(DownloadedIdsPath, jsonEntry);
+            // 2) Append
+            list.Add(audioModel);
+            this.Downloads.Add(audioModel);
+            this.IdsToSong[songId] = audioModel;
+            // 3) Save
+            var opts = new JsonSerializerOptions { WriteIndented = true };
+            var newJson = JsonSerializer.Serialize(list, opts);
+            File.WriteAllTextAsync(DownloadedIdsPath, newJson);
             return Task.CompletedTask;
         }
         catch (Exception ex)

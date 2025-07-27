@@ -7,6 +7,34 @@
             });
         });
 });
+function links() {
+    document.querySelectorAll('.link[data-url]')
+        .forEach(link => {
+            link.addEventListener('click', function () {
+                console.log('Link clicked:', this.dataset.url);
+                loadAjax(this.dataset.url);
+            });
+        });
+}
+function formAjax() {
+    document.querySelectorAll('.form-link[data-url]').
+        forEach(link => {
+            link.addEventListener('click', function () {
+                $.ajax({
+                    url: this.dataset.url,
+                    type: 'POST',
+                    success: function (data) {
+                        $('#append-ajax').html(data);
+                        links();
+                        formAjax(); // Rebind form links after loading new content
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading form:', status, error);
+                    }
+                })
+            });
+        })
+}
 function loadAjax(url) {
     console.log('Loading URL:', url);
     $.ajax({
@@ -14,6 +42,7 @@ function loadAjax(url) {
         type: 'GET',
         success: function(data){
             $('#append-ajax').html(data);
+            links();
         }
     })
 }
@@ -48,6 +77,7 @@ function audioPlayer({ songid, artist, name, path }) {
         },
         onplay: () => {
             updateTime();
+            document.querySelector('.player').style.visibility = visible;
         }
     });
     id = audio.play();

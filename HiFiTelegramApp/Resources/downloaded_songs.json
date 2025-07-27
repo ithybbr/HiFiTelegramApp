@@ -1,26 +1,38 @@
 [
-    {
-        "SongId": 5716,
-        "Path": "/downloads/1.flac",
-        "Name": "0",
-        "Artist": "$NOT"
-    },
-    {
-        "SongId": 25887,
-        "Path": "/downloads/2.flac",
-        "Name": "#1 Stunna",
-        "Artist": "$uicideboy$"
-    },
-    {
-        "SongId": 25889,
-        "Path": "/downloads/01 - $uicideboy$ - 7th or St. Tammany(Explicit).flac",
-        "Name": "7th or St. Tammany",
-        "Artist": "$uicideboy$"
-    },
-    {
-        "SongId": 26027,
-        "Path": "/downloads/06_$uicideboy$_100_Blunts_DJ_Phantazm_RemixExplicit.flac",
-        "Name": "100 Blunts (DJ Phantazm Remix) (Explicit)",
-        "Artist": "$uicideboy$"
-    }
-]{"SongId":5716,"Path":"/downloads/01 - $NOT, A$AP Rocky - Doja(Explicit).flac","Artist":"$NOT","Name":"Song 5716"}
+  {
+    "SongId": 5716,
+    "Path": "/downloads/1.flac",
+    "Artist": "$NOT",
+    "Name": "0"
+  },
+  {
+    "SongId": 25887,
+    "Path": "/downloads/2.flac",
+    "Artist": "$uicideboy$",
+    "Name": "#1 Stunna"
+  },
+  {
+    "SongId": 25889,
+    "Path": "/downloads/01 - $uicideboy$ - 7th or St. Tammany(Explicit).flac",
+    "Artist": "$uicideboy$",
+    "Name": "7th or St. Tammany"
+  },
+  {
+    "SongId": 26027,
+    "Path": "/downloads/06_$uicideboy$_100_Blunts_DJ_Phantazm_RemixExplicit.flac",
+    "Artist": "$uicideboy$",
+    "Name": "100 Blunts (DJ Phantazm Remix) (Explicit)"
+  },
+  {
+    "SongId": 30512,
+    "Path": "/downloads/01 - Bladee, 16yrold - I Chose to Be This Way.flac",
+    "Artist": "16yrold",
+    "Name": "Song 30512"
+  },
+  {
+    "SongId": 14934,
+    "Path": "/downloads/02 - 347aidan - MEMORIES!.flac",
+    "Artist": "347aidan",
+    "Name": "Song 14934"
+  }
+]

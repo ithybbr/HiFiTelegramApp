@@ -27,12 +27,10 @@ namespace HiFiTelegramApp.Controllers
             return PartialView(list);
         }
         [HttpPost]
-        public async Task<IActionResult> DownloadSong(string artist, int songId)
+        public async Task DownloadSong(string artist, int songId)
         {
             Console.WriteLine($"Download request for songId: {songId} by artist: {artist}");
             await _downloadService.Download(artist, songId);
-
-            return RedirectToAction("Artist", "Home", new { artist });
         }
     }
 }

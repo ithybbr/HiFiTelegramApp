@@ -16,18 +16,15 @@
 					@audio.Artist - @audio.Name
                 </div>
                 <div class="d-flex gap-2">
-                    <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@audio.Artist">
-                        <button type="submit" class="btn btn-light">Add to favorites</button>
-                    </form>
-                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteArtists" asp-route-artist="remove/@audio.Artist">
-                        <button type="submit" class="btn btn-light">Remove from favorites</button>
-                    </form>
-                    <form asp-controller="Download" asp-action="Delete" asp-route-artist="remove/@audio.SongId">
-                        <button type="submit" class="btn btn-light">Delete</button>
-                    </form>
+                    <button class="btn btn-light link" data-url="@Url.Action("AddToFavoriteArtists", "Favorite", new {artist=audio.Artist})">Add to Favorites</button>
+                    <button class="btn btn-light link" data-url="@Url.Action("RemoveFromFavoriteArtists", "Favorite", new { artist = audio.Artist })">Remove from favorites</button>
+                    <button class="btn btn-light link" data-url="@Url.Action("Delete", "Download", new { songId = audio.SongId })">Remove from favorites</button>
                 </div>
             </li>
 			i++;
         }
     </ul>
 </div>
+@section Script {
+    <script src="~/js/site.js" asp-append-version="true"></script>
+}

@@ -6,15 +6,14 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome home</h1>
+    <button class="bruh"></button>
     <ul class="list-group">
         @foreach (var artist in Model)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a asp-controller="Home" asp-action="Artist" asp-route-artist="@artist">@artist</a>
+                <a class="link" data-url="@Url.Action("Artist", "Home", new { artist = artist })">@artist</a>
                 <div class="d-flex gap-2">
-                    <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@artist">
-                        <button type="submit" class="btn btn-light">Add to favorites</button>
-                    </form>
+                    <a data-url="@Url.Action("AddToFavoriteArtists", "Favorite", new { artist = artist })">Add to favorites</a>
                 </div>
             </li>
         }
