@@ -23,30 +23,29 @@ namespace HiFiTelegramApp.Controllers
             return PartialView(favoriteArtists);
         }
         [HttpPost("add")]
-        public IActionResult AddToFavoriteArtists(string artist)
+        public async Task AddToFavoriteArtists(string artist)
         {
             try
             {
                 Console.WriteLine($"Adding {artist} to favorites");
-                this._favoriteService.AddToFavoriteMarkArtists(artist);
-                return this.RedirectToAction("Index", "Home");
+                await this._favoriteService.AddToFavoriteMarkArtists(artist);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                Console.WriteLine(StatusCode(500, ex));
             }
         }
         [HttpPost("remove")]
-        public IActionResult RemoveFromFavoriteArtists(string artist)
+        public async Task RemoveFromFavoriteArtists(string artist)
         {
             try
             {
-                this._favoriteService.RemoveFromFavoriteMarkArtists(artist);
-                return StatusCode(201);
+                await this._favoriteService.RemoveFromFavoriteMarkArtists(artist);
+                Console.WriteLine(StatusCode(201));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                Console.WriteLine(StatusCode(500, ex));
             }
         }
     }

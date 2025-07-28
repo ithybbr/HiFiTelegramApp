@@ -16,25 +16,6 @@ function links() {
             });
         });
 }
-function formAjax() {
-    document.querySelectorAll('.form-link[data-url]').
-        forEach(link => {
-            link.addEventListener('click', function () {
-                $.ajax({
-                    url: this.dataset.url,
-                    type: 'POST',
-                    success: function (data) {
-                        $('#append-ajax').html(data);
-                        links();
-                        formAjax(); // Rebind form links after loading new content
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error loading form:', status, error);
-                    }
-                })
-            });
-        })
-}
 function loadAjax(url) {
     console.log('Loading URL:', url);
     $.ajax({
@@ -56,7 +37,9 @@ var timeLabel;
 var durLabel;
 var progress;
 let interval;
-function audioPlayer({ songid, artist, name, path }) {
+var nextSong;
+var previousSong;
+function audioPlayer({ songid, artist, name, path }, i) {
     artistLabel.innerHTML = artist;
     songLabel.innerHTML = name;
     Howler.stop();
@@ -80,6 +63,8 @@ function audioPlayer({ songid, artist, name, path }) {
             document.querySelector('.player').style.visibility = visible;
         }
     });
+    previousSong.value = i - 1;
+    nextSong.value = i + 1;
     id = audio.play();
 }
 function updateTime() {
@@ -105,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     songLabel = document.querySelector('.player #song');
     timeLabel = document.querySelector('.player #time');
     durLabel = document.querySelector('.player #duration');
+    nextSong = document.querySelector('.player #next-song');
+    previousSong = document.querySelector('.player #previous-song');
     document.querySelector('.player #player-ps-btn')
         .addEventListener('click', function () {
             if (audio.playing()) {
@@ -129,5 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
         pr = this.value / 100;
         audio.seek(pr * duration);
         console.log('Seek to:', this.value);
+    });
+    nextSong.addEventListener('click', function () {
+        _ = document.querySelector('audio-data-' + nextSong.value).click;
+    });
+    previousSong.addEventListener('click', function () {
+        _ = document.querySelector('audio-data-' + previousSong.value).click;
     });
 });

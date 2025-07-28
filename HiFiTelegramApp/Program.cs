@@ -40,7 +40,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
    name: "default",
-   pattern: "{controller=Home}/{action=Index}/{artist?}");
+   pattern: "{controller=Home}/{action=Index}/{artist?}/{songId?}");
 
 app.UseEndpoints(endpoints =>
 {

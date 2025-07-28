@@ -32,5 +32,12 @@ namespace HiFiTelegramApp.Controllers
             Console.WriteLine($"Download request for songId: {songId} by artist: {artist}");
             await _downloadService.Download(artist, songId);
         }
+
+        [HttpPost("remove/{songId:int}")]
+        public async Task DeleteSong(int songId)
+        {
+            Console.WriteLine($"Delete request for songId: {songId}");
+            await _downloadService.DeleteFromDownloads(songId);
+        }
     }
 }
