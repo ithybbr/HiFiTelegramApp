@@ -15,6 +15,15 @@
                         <button type="submit" class="btn btn-light">Remove from favorites</button>
                     </form>
                 </div>
+                @foreach (var song in entry.Songs)
+                {
+                    <div>@song.Name</div>
+                    <div>@song.SongId</div>
+                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteSongs" asp-route-artist="@entry.Artist" asp-route-songId="@song.SongId">
+                        <input type="hidden" value="@song.Name"/>
+                        <button type="submit" class="btn btn-light">Remove from favorites</button>
+                    </form>
+                }
             </li>
         }
     </ul>

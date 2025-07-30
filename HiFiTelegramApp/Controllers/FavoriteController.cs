@@ -48,5 +48,31 @@ namespace HiFiTelegramApp.Controllers
                 Console.WriteLine(StatusCode(500, ex));
             }
         }
+        
+        [HttpPost("add/{artist}/{name}")]
+        public async Task AddToFavoriteSongs(string artist, string name, int songId)
+        {
+            try
+            {
+                await this._favoriteService.AddToFavoriteSongs(artist, name, songId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(StatusCode(500, ex));
+            }
+        }
+
+        [HttpPost("remove/{artist}/{songId:int}")]
+        public async Task RemoveFromFavoriteSongs(string artist, string name, int songId)
+        {
+            try
+            {
+                await this._favoriteService.RemoveFromFavoriteSongs(artist, name, songId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(StatusCode(500, ex));
+            }
+        }
     }
 }
