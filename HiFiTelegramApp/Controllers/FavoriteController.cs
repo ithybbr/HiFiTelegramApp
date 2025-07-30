@@ -19,7 +19,7 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
-            var favoriteArtists = this._favoriteService.GetFavoriteArtists();
+            var favoriteArtists = this._favoriteService.GetFavorites();
             return PartialView(favoriteArtists);
         }
         [HttpPost("add")]
@@ -28,7 +28,7 @@ namespace HiFiTelegramApp.Controllers
             try
             {
                 Console.WriteLine($"Adding {artist} to favorites");
-                await this._favoriteService.AddToFavoriteMarkArtists(artist);
+                await this._favoriteService.AddToFavoriteArtists(artist);
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace HiFiTelegramApp.Controllers
         {
             try
             {
-                await this._favoriteService.RemoveFromFavoriteMarkArtists(artist);
+                await this._favoriteService.RemoveFromFavoriteArtists(artist);
                 Console.WriteLine(StatusCode(201));
             }
             catch (Exception ex)

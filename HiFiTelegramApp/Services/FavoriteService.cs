@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
+using HiFiTelegramApp.Models;
+using Newtonsoft.Json.Linq;
 
 namespace HiFiTelegramApp.Services;
 
@@ -9,10 +11,10 @@ public class FavoriteService
     public FavoriteService(IWebHostEnvironment env)
     {
         this._env = env;
-        var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.txt");
-        this.Favorites = [.. File.ReadAllLines(favoritesPath)];
+        var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
+        this.Favorites = [.. JsonSerializer.Deserialize<List<FavoriteModel>>(File.ReadAllText(favoritesPath))!];
     }
-    public List<string> GetFavoriteArtists()
+    public List<FavoriteModel> GetFavorites()
     {
         try
         {
@@ -24,19 +26,27 @@ public class FavoriteService
             return [];
         }
     }
-     public Task AddToFavoriteMarkArtists(string artist)
+     public Task AddToFavoriteArtists(string artist)
     {
         Console.WriteLine($"Adding {artist} to favorites");
         try
         {
-            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.txt");
-            if(this.Favorites.Contains(artist))
+            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
+            if(this.Favorites.Exists(x => x.Artist == artist))
             {
                 Console.WriteLine($"Artist {artist} is already in favorites");
                 return Task.CompletedTask;
             }
-            File.AppendAllLines(favoritesPath, [artist]);
-            this.Favorites.Add(artist);
+            var jsonContent = File.ReadAllText(favoritesPath);
+            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
+            var model = new FavoriteModel
+            {
+                Artist = artist,
+                Songs = []
+            };
+            json.Add(model);
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
+            this.Favorites.Add(model);
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -45,15 +55,15 @@ public class FavoriteService
         }
     }
 
-    public Task RemoveFromFavoriteMarkArtists(string artist)
+    public Task RemoveFromFavoriteArtists(string artist)
     {
         try
         {
-            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
-            var json = File.ReadAllText(SongsPath);
-
-            var obj = JObject.Parse(json);
-            obj[artist]!["~Favorite"] = false;
+            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
+            var jsonContent = File.ReadAllText(favoritesPath);
+            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
+            json.RemoveAll(x => x.Artist == artist);
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -66,11 +76,21 @@ public class FavoriteService
     {
         try
         {
-            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
-            var json = File.ReadAllText(SongsPath);
-
-            var obj = JObject.Parse(json);
-            _ = obj[artist]!["Favorites"]?.Append(songId);
+            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
+            var jsonContent = File.ReadAllText(favoritesPath);
+            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
+            var entry = json.FirstOrDefault(x => x.Artist == artist);
+            if (entry == null)
+            {
+                AddToFavoriteArtists(artist);
+            }
+            entry!.Songs.Add(new FavoriteSongModel
+            {
+                Artist = artist,
+                SongId = songId,
+                Name = song
+            });
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -83,18 +103,16 @@ public class FavoriteService
     {
         try
         {
-            var SongsPath = Path.Combine(_env.ContentRootPath, "Resources", "performer_title_id.json");
-            var json = File.ReadAllText(SongsPath);
-
-            var obj = JObject.Parse(json);
-            var favs = obj[artist]?["Favorites"];
-            for (var i = 0; i < favs?.Count(); i++)
+            var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
+            var jsonContent = File.ReadAllText(favoritesPath);
+            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
+            var entry = json.FirstOrDefault(x => x.Artist == artist);
+            if (entry is null)
             {
-                if (favs[i]?.Value<int>() == songId)
-                {
-                    favs[i]?.Remove();
-                }
+                return Task.FromCanceled(new CancellationToken(true));
             }
+            entry!.Songs.RemoveAll(x => x.SongId == songId);
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -103,5 +121,5 @@ public class FavoriteService
         }
     }
 
-    private List<string> Favorites { get; set; } = [];
+    private List<FavoriteModel> Favorites { get; set; }
 }
