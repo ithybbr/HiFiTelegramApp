@@ -76,8 +76,9 @@ public class DownloadService
             var list = JsonSerializer.Deserialize<List<AudioModel>>(text)
                        ?? [];
 
-            AudioModel audioModel = new AudioModel
+            AudioModel audioModel = new()
             {
+                Id = list.Count + 1,
                 SongId = songId,
                 Path = trimmed,
                 Artist = artist,

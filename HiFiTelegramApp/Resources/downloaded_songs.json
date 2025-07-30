@@ -1,35 +1,41 @@
 [
   {
+    "Id":  1,
     "SongId": 5716,
     "Path": "/downloads/1.flac",
     "Artist": "$NOT",
     "Name": "0"
   },
   {
+    "Id":  2,
     "SongId": 25887,
     "Path": "/downloads/2.flac",
     "Artist": "$uicideboy$",
     "Name": "#1 Stunna"
   },
   {
+    "Id":  3,
     "SongId": 25889,
     "Path": "/downloads/01 - $uicideboy$ - 7th or St. Tammany(Explicit).flac",
     "Artist": "$uicideboy$",
     "Name": "7th or St. Tammany"
   },
   {
+    "Id":  4,
     "SongId": 26027,
     "Path": "/downloads/06_$uicideboy$_100_Blunts_DJ_Phantazm_RemixExplicit.flac",
     "Artist": "$uicideboy$",
     "Name": "100 Blunts (DJ Phantazm Remix) (Explicit)"
   },
   {
+    "Id":  5,
     "SongId": 30512,
     "Path": "/downloads/01 - Bladee, 16yrold - I Chose to Be This Way.flac",
     "Artist": "16yrold",
     "Name": "Song 30512"
   },
   {
+    "Id":  6,
     "SongId": 14934,
     "Path": "/downloads/02 - 347aidan - MEMORIES!.flac",
     "Artist": "347aidan",

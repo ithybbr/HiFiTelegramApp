@@ -12,7 +12,15 @@ public class FavoriteService
     {
         this._env = env;
         var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
-        this.Favorites = [.. JsonSerializer.Deserialize<List<FavoriteModel>>(File.ReadAllText(favoritesPath))!];
+        var favorites = new List<FavoriteModel>();
+        try
+        {
+            var favaroites = JsonSerializer.Deserialize<List<FavoriteModel>>(File.ReadAllText(favoritesPath));
+        }
+        catch {
+            Console.WriteLine($"Error reading favorites from {favoritesPath}, initializing empty list.");
+        }
+        this.Favorites = [.. favorites];
     }
     public List<FavoriteModel> GetFavorites()
     {
@@ -37,16 +45,14 @@ public class FavoriteService
                 Console.WriteLine($"Artist {artist} is already in favorites");
                 return Task.CompletedTask;
             }
-            var jsonContent = File.ReadAllText(favoritesPath);
-            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
             var model = new FavoriteModel
             {
                 Artist = artist,
                 Songs = []
             };
-            json.Add(model);
-            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
+            var opts = new JsonSerializerOptions { WriteIndented = true };
             this.Favorites.Add(model);
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(this.Favorites, opts));
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -77,9 +83,7 @@ public class FavoriteService
         try
         {
             var favoritesPath = Path.Combine(_env.ContentRootPath, "Resources", "favorites.json");
-            var jsonContent = File.ReadAllText(favoritesPath);
-            var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
-            var entry = json.FirstOrDefault(x => x.Artist == artist);
+            var entry = this.Favorites.FirstOrDefault(x => x.Artist == artist);
             if (entry == null)
             {
                 AddToFavoriteArtists(artist);
@@ -90,7 +94,9 @@ public class FavoriteService
                 SongId = songId,
                 Name = song
             });
-            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
+            this.Favorites.RemoveAll(x => x.Artist == artist);
+            this.Favorites.Add(entry);
+            File.WriteAllText(favoritesPath, JsonSerializer.Serialize(this.Favorites));
             return Task.CompletedTask;
         }
         catch (Exception ex)

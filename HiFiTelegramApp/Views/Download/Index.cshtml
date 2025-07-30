@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<AudioModel>
 @{
     ViewData["Title"] = "Downloads";
-    var i = 0;
 }
 <div class="text-center">
     <h1 class="display-4">Downloads</h1>
@@ -12,7 +11,7 @@
         @foreach (var audio in Model)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="audio-data-@i" onclick='audioPlayer(@Html.Raw(Json.Serialize(audio)), i)'>
+                <div class="audio-data-@audio.Id" onclick='audioPlayer(@Html.Raw(Json.Serialize(audio)))'>
 					@audio.Artist - @audio.Name
                 </div>
                 <div class="d-flex gap-2">
@@ -27,7 +26,6 @@
                     </form>
                 </div>
             </li>
-			i++;
         }
     </ul>
 </div>

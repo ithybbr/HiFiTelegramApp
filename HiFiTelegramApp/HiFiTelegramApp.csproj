@@ -26,7 +26,7 @@
 	    <None Include="Resources\performers.txt">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </None>
-		<None Include="Resources\favorites.txt">
+		<None Include="Resources\favorites.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Include="Resources\performer_title_id.json">
@@ -35,7 +35,6 @@
 		<None Include="Resources\downloaded_songs.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Include="wwwroot\downloads\1.flac" />
     </ItemGroup>
     <ItemGroup>
       <None Update="Utilities\downloadScript.py">

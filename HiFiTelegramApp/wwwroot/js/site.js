@@ -16,6 +16,22 @@ function links() {
             });
         });
 }
+var artists = [];
+function loadSearch() {
+    console.log('Loading search functionality');
+    artists = Array.from(document.querySelectorAll('.list-group-item')).map(artist => ({
+        artist,
+        innerText: artist.innerText.toLowerCase()
+    }));
+    document.querySelector('.search #search-input').addEventListener('input', function () {
+        console.log('Search input changed:', this.value);
+        artists.forEach(({ artist, innerText }) => {
+            const hide = this.value && innerText.indexOf(this.value) === -1;
+            artist.classList.toggle('d-none', hide);
+        });
+    }, 450);
+}
+
 function loadAjax(url) {
     console.log('Loading URL:', url);
     $.ajax({
@@ -24,6 +40,7 @@ function loadAjax(url) {
         success: function(data){
             $('#append-ajax').html(data);
             links();
+            loadSearch();
         }
     })
 }
@@ -39,7 +56,7 @@ var progress;
 let interval;
 var nextSong;
 var previousSong;
-function audioPlayer({ songid, artist, name, path }, i) {
+function audioPlayer({ id, songid, artist, name, path }) {
     artistLabel.innerHTML = artist;
     songLabel.innerHTML = name;
     Howler.stop();
@@ -60,11 +77,11 @@ function audioPlayer({ songid, artist, name, path }, i) {
         },
         onplay: () => {
             updateTime();
-            document.querySelector('.player').style.visibility = visible;
+            document.querySelector('.player').style.visibility = "visible";
         }
     });
-    previousSong.value = i - 1;
-    nextSong.value = i + 1;
+    previousSong.value = id - 1;
+    nextSong.value = id + 1;
     id = audio.play();
 }
 function updateTime() {
@@ -85,13 +102,14 @@ function convertSeconds(seconds) {
     }
     return minutes + ':' + seconds;
 }
+//Player related event listeners
 document.addEventListener('DOMContentLoaded', () => {
     artistLabel = document.querySelector('.player #artist');
     songLabel = document.querySelector('.player #song');
     timeLabel = document.querySelector('.player #time');
     durLabel = document.querySelector('.player #duration');
-    nextSong = document.querySelector('.player #next-song');
-    previousSong = document.querySelector('.player #previous-song');
+    nextSong = document.querySelector('.player #next');
+    previousSong = document.querySelector('.player #previous');
     document.querySelector('.player #player-ps-btn')
         .addEventListener('click', function () {
             if (audio.playing()) {
@@ -118,9 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Seek to:', this.value);
     });
     nextSong.addEventListener('click', function () {
-        _ = document.querySelector('audio-data-' + nextSong.value).click;
+        _ = document.querySelector('.audio-data-' + nextSong.value).click();
     });
     previousSong.addEventListener('click', function () {
-        _ = document.querySelector('audio-data-' + previousSong.value).click;
+        _ = document.querySelector('.audio-data-' + previousSong.value).click();
     });
 });

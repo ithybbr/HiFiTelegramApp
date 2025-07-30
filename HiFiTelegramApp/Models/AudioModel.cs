@@ -2,6 +2,7 @@
 
 public class AudioModel
 {
+    public int Id { get; init; }
     public int SongId { get; init; }
     public string Path { get; init; } = string.Empty;
     public string Artist { get; init; } = string.Empty;
