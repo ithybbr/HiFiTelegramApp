@@ -4,25 +4,28 @@ import os
 from dotenv import load_dotenv
 import sys
 
-def start_up(message_id: int) -> str:
-    load_dotenv()
-    api_id     = int(os.getenv("API_ID"))
-    api_hash   = os.getenv("API_HASH")
-    bot_token  = os.getenv("BOT_TOKEN")
-    channel_id = os.getenv("CHANNEL_ID")
+load_dotenv()
+api_id     = int(os.getenv("API_ID"))
+api_hash   = os.getenv("API_HASH")
+bot_token  = os.getenv("BOT_TOKEN")
+channel_id = os.getenv("CHANNEL_ID")
+bot = Client("hifimusic_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
-    # ensure there is a loop for this thread
-    try:
-        loop = asyncio.get_event_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+# 2) Start it exactly once, on a background thread
+_started = False
+def start_bot():
+    global _started
+    if _started:
+        return
+    _started = True
 
-    with Client("hifimusic_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token) as app:
-        # Run your async download_song directly, passing both args
-        return download_song(app, message_id)
+    def run():
+        bot.run()   # this blocks inside Python but in our own thread
 
-def download_song(app, message_id) -> str:
-    message = app.get_messages("hifimusicfromtidal", message_id)
-    path = app.download_media(message, file_name = "wwwroot/downloads/")
+    t = threading.Thread(target=run, daemon=True, name="PyrogramBot")
+    t.start()
+
+def download_song(message_id) -> str:
+    message = bot.get_messages("hifimusicfromtidal", message_id)
+    path = bot.download_media(message, file_name = "wwwroot/downloads/")
     return path

@@ -13,6 +13,8 @@ builder.Services.AddElectron();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.ArtistsService>();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.FavoriteService>();
 builder.Services.AddSingleton<HiFiTelegramApp.Services.DownloadService>();
+builder.Services.AddSingleton<HiFiTelegramApp.Services.DownloadSongService>();
+
 DotNetEnv.Env.Load();
 var app = builder.Build();
 

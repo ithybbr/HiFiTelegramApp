@@ -20,7 +20,7 @@
                     <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@song.Artist">
                         <button type="submit" class="btn btn-light">Add to favorites</button>
                     </form>
-                    <form asp-controller="Download" asp-action="DownloadSong" asp-route-artist="@song.Artist">
+                    <form asp-controller="DownloadSong" asp-action="DownloadSong" asp-route-artist="@song.Artist">
 						<input type="hidden" name="songId" value="@song.SongId" />
                         <button type="submit" class="btn btn-light">Download</button>
                     </form>

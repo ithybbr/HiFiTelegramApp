@@ -32,7 +32,18 @@ function loadSearch() {
     }, 450);
 }
 
+var data = ['<li>…</li>'];
+var clusterize = new Clusterize({
+    rows: data,
+    scrollId: 'scrollArea',
+    contentId: 'contentArea'
+});
+
+function showSpinner() { document.getElementById('loading-spinner').style.display = 'block'; }
+function hideSpinner() { document.getElementById('loading-spinner').style.display = 'none'; }
+
 function loadAjax(url) {
+    showSpinner();
     console.log('Loading URL:', url);
     $.ajax({
         url: url,
@@ -40,7 +51,17 @@ function loadAjax(url) {
         success: function(data){
             $('#append-ajax').html(data);
             links();
-            loadSearch();
+            try {
+                loadSearch();
+            }
+            catch (e) {
+                console.log('Search functionality not available:', e);
+            }
+            hideSpinner();
+        },
+        failure: function (xhr, status, error) {
+            console.error('Error loading data:', status, error);
+            hideSpinner();
         }
     })
 }
