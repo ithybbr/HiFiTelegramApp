@@ -28,22 +28,19 @@ public class DownloadSongService
                 Path.PathSeparator.ToString(),
                 [sitePackages, libFolder, DllsFolder, PythonEngine.PythonPath]
             );
-                PythonEngine.Initialize();
-                PythonEngine.BeginAllowThreads();
-            using (Py.GIL())
-            {
-                var scriptFolder = Path.Combine(_env.ContentRootPath, "Utilities");
-                dynamic os = Py.Import("os");
-                os.environ["API_ID"] = new PyString(Environment.GetEnvironmentVariable("API_ID")!);
-                os.environ["API_HASH"] = new PyString(Environment.GetEnvironmentVariable("API_HASH")!);
-                os.environ["BOT_TOKEN"] = new PyString(Environment.GetEnvironmentVariable("BOT_TOKEN")!);
-                os.environ["CHANNEL_ID"] = new PyString(Environment.GetEnvironmentVariable("CHANNEL_ID")!);
-                dynamic sys = Py.Import("sys");
-                sys.path.append(Path.Combine(scriptFolder));
-                dynamic pythonScript = Py.Import("downloadScript");
-                sys.path.append(Path.Combine(_env.ContentRootPath, "Utilities"));
-                pythonScript.start_up();
-            }
+            PythonEngine.Initialize();
+            PythonEngine.BeginAllowThreads();
+            var scriptFolder = Path.Combine(_env.ContentRootPath, "Utilities");
+            dynamic os = Py.Import("os");
+            os.environ["API_ID"] = new PyString(Environment.GetEnvironmentVariable("API_ID")!);
+            os.environ["API_HASH"] = new PyString(Environment.GetEnvironmentVariable("API_HASH")!);
+            os.environ["BOT_TOKEN"] = new PyString(Environment.GetEnvironmentVariable("BOT_TOKEN")!);
+            os.environ["CHANNEL_ID"] = new PyString(Environment.GetEnvironmentVariable("CHANNEL_ID")!);
+            dynamic sys = Py.Import("sys");
+            sys.path.append(Path.Combine(scriptFolder));
+            dynamic pythonScript = Py.Import("downloadScript");
+            sys.path.append(Path.Combine(_env.ContentRootPath, "Utilities"));
+            pythonScript.start_up();
         }
     }
     public async Task Download(string artist, int songId)

@@ -41,14 +41,13 @@ var clusterize = new Clusterize({
 
 function showSpinner() { document.getElementById('loading-spinner').style.display = 'block'; }
 function hideSpinner() { document.getElementById('loading-spinner').style.display = 'none'; }
-
 function loadAjax(url) {
     showSpinner();
     console.log('Loading URL:', url);
     $.ajax({
         url: url,
         type: 'GET',
-        success: function(data){
+        success: function (data) {
             $('#append-ajax').html(data);
             links();
             try {
@@ -74,10 +73,17 @@ var songLabel;
 var timeLabel;
 var durLabel;
 var progress;
-let interval;
+var interval;
 var nextSong;
 var previousSong;
+var playerloaded = false;
 function audioPlayer({ id, songid, artist, name, path }) {
+    if (!playerloaded) {
+        loadPlayer();
+        playerloaded = true;
+    }
+    timeLabel.innerHTML = "0:00";
+    progress.value = 0;
     artistLabel.innerHTML = artist;
     songLabel.innerHTML = name;
     Howler.stop();
@@ -90,6 +96,7 @@ function audioPlayer({ id, songid, artist, name, path }) {
             timeLabel.innerHTML = "0:00";
             progress.value = 0;
             clearInterval(interval);
+            playNext();
         },
         onload: () => {
             duration = audio.duration();
@@ -123,8 +130,7 @@ function convertSeconds(seconds) {
     }
     return minutes + ':' + seconds;
 }
-//Player related event listeners
-document.addEventListener('DOMContentLoaded', () => {
+function loadPlayer() {
     artistLabel = document.querySelector('.player #artist');
     songLabel = document.querySelector('.player #song');
     timeLabel = document.querySelector('.player #time');
@@ -146,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     var vol = document.querySelector('.player #volume');
     vol.addEventListener('input', function () {
-        volume = this.value/100;
+        volume = this.value / 100;
         audio.volume(volume);
         console.log('Volume changed to:', this.value);
     });
@@ -157,9 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Seek to:', this.value);
     });
     nextSong.addEventListener('click', function () {
-        _ = document.querySelector('.audio-data-' + nextSong.value).click();
+        playNext();
     });
     previousSong.addEventListener('click', function () {
         _ = document.querySelector('.audio-data-' + previousSong.value).click();
     });
-});
+}
+function playNext() {
+    _ = document.querySelector('.audio-data-' + nextSong.value).click();
+}

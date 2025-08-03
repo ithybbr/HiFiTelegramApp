@@ -1,8 +1,7 @@
-﻿import asyncio
-from pyrogram import Client
+﻿from pyrogram import Client
+import threading
 import os
 from dotenv import load_dotenv
-import sys
 
 load_dotenv()
 api_id     = int(os.getenv("API_ID"))
@@ -13,7 +12,7 @@ bot = Client("hifimusic_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_to
 
 # 2) Start it exactly once, on a background thread
 _started = False
-def start_bot():
+def start_up():
     global _started
     if _started:
         return

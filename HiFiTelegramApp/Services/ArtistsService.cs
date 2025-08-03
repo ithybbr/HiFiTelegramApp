@@ -21,6 +21,7 @@ public class ArtistsService
     private List<string> GetArtists()
     {
         var ArtistsPath = Path.Combine(_env.ContentRootPath, "Resources", "performers.txt");
+        Console.WriteLine($"Reading artists from: {ArtistsPath}");
         using var reader = new StreamReader(ArtistsPath);
         var performer = reader.ReadLine()!;
         List<string> result = [];
