@@ -11,7 +11,7 @@ public class DownloadSongService
 {
     private readonly IWebHostEnvironment _env;
     private readonly DownloadService downloadService;
-
+    private dynamic? pythonBot;
     public DownloadSongService(IWebHostEnvironment env, DownloadService downloadService)
     {
         this._env = env;
@@ -30,17 +30,20 @@ public class DownloadSongService
             );
             PythonEngine.Initialize();
             PythonEngine.BeginAllowThreads();
-            var scriptFolder = Path.Combine(_env.ContentRootPath, "Utilities");
-            dynamic os = Py.Import("os");
-            os.environ["API_ID"] = new PyString(Environment.GetEnvironmentVariable("API_ID")!);
-            os.environ["API_HASH"] = new PyString(Environment.GetEnvironmentVariable("API_HASH")!);
-            os.environ["BOT_TOKEN"] = new PyString(Environment.GetEnvironmentVariable("BOT_TOKEN")!);
-            os.environ["CHANNEL_ID"] = new PyString(Environment.GetEnvironmentVariable("CHANNEL_ID")!);
-            dynamic sys = Py.Import("sys");
-            sys.path.append(Path.Combine(scriptFolder));
-            dynamic pythonScript = Py.Import("downloadScript");
-            sys.path.append(Path.Combine(_env.ContentRootPath, "Utilities"));
-            pythonScript.start_up();
+            using (Py.GIL())
+            {
+                var scriptFolder = Path.Combine(_env.ContentRootPath, "Utilities");
+                dynamic os = Py.Import("os");
+                os.environ["API_ID"] = new PyString(Environment.GetEnvironmentVariable("API_ID")!);
+                os.environ["API_HASH"] = new PyString(Environment.GetEnvironmentVariable("API_HASH")!);
+                os.environ["BOT_TOKEN"] = new PyString(Environment.GetEnvironmentVariable("BOT_TOKEN")!);
+                os.environ["CHANNEL_ID"] = new PyString(Environment.GetEnvironmentVariable("CHANNEL_ID")!);
+                dynamic sys = Py.Import("sys");
+                sys.path.append(Path.Combine(scriptFolder));
+                pythonBot = Py.Import("downloadScript");
+                sys.path.append(Path.Combine(_env.ContentRootPath, "Utilities"));
+                pythonBot.start_bot();
+            }
         }
     }
     public async Task Download(string artist, int songId)
@@ -48,12 +51,24 @@ public class DownloadSongService
         Console.WriteLine($"Download request for songId: {songId}");
         using (Py.GIL())
         {
-            dynamic pythonScript = Py.Import("downloadScript");
-            var message = new PyInt(songId);
-            dynamic result = pythonScript.download_song(new PyInt(songId));
-            string path = (string)result;
-            Console.WriteLine($"Download result for songId {songId}: {path}");
-            await downloadService.AddToDownloads(artist, songId, path);
+            if (pythonBot != null) {
+                bool started = pythonBot.is_started();
+                if (!started)
+                {
+                    Console.Error.WriteLine("Bot is not initialized!");
+                    // optionally try to start again:
+                    // pythonBot.start_bot();
+                    return;
+                }
+                dynamic result = pythonBot.download_song(new PyInt(songId));
+                string path = (string)result;
+                Console.WriteLine($"Download result for songId {songId}: {path}");
+                await downloadService.AddToDownloads(artist, songId, path);
+            }
+            else
+            {
+                Console.WriteLine("Python script is not initialized.");
+            }
         }
     }
 }

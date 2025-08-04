@@ -12,19 +12,26 @@ bot = Client("hifimusic_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_to
 
 # 2) Start it exactly once, on a background thread
 _started = False
-def start_up():
+def start_bot():
     global _started
     if _started:
-        return
-    _started = True
+        return True
+    try:
+        t = threading.Thread(target=bot.run, daemon=True, name="PyrogramBot")
+        t.start()
+        _started = True
+        return True
+    except Exception:
+        return False
 
-    def run():
-        bot.run()   # this blocks inside Python but in our own thread
-
-    t = threading.Thread(target=run, daemon=True, name="PyrogramBot")
-    t.start()
+def is_started():
+    return _started
 
 def download_song(message_id) -> str:
+    try:
+        await bot.start()
+    except ConnectionError e:
+        print(f"Connection error: {e}")
     message = bot.get_messages("hifimusicfromtidal", message_id)
     path = bot.download_media(message, file_name = "wwwroot/downloads/")
     return path
