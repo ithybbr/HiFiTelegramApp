@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System.ComponentModel;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ElectronNET.API;
 using HiFiTelegramApp.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Python.Runtime;
 
 namespace HiFiTelegramApp.Services;
@@ -11,11 +13,14 @@ public class DownloadSongService
 {
     private readonly IWebHostEnvironment _env;
     private readonly DownloadService downloadService;
-    private dynamic? pythonBot;
     public DownloadSongService(IWebHostEnvironment env, DownloadService downloadService)
     {
         this._env = env;
         this.downloadService = downloadService;
+        InitializePythonBot();
+    }
+    private void InitializePythonBot()
+    {
         if (!PythonEngine.IsInitialized)
         {
             var pythonHomeDir = Path.Combine(_env.ContentRootPath, "python");
@@ -40,35 +45,31 @@ public class DownloadSongService
                 os.environ["CHANNEL_ID"] = new PyString(Environment.GetEnvironmentVariable("CHANNEL_ID")!);
                 dynamic sys = Py.Import("sys");
                 sys.path.append(Path.Combine(scriptFolder));
-                pythonBot = Py.Import("downloadScript");
                 sys.path.append(Path.Combine(_env.ContentRootPath, "Utilities"));
-                pythonBot.start_bot();
             }
         }
     }
-    public async Task Download(string artist, int songId)
+    public Task Download(string artist, string songName, int songId)
     {
-        Console.WriteLine($"Download request for songId: {songId}");
-        using (Py.GIL())
+        try
         {
-            if (pythonBot != null) {
-                bool started = pythonBot.is_started();
-                if (!started)
-                {
-                    Console.Error.WriteLine("Bot is not initialized!");
-                    // optionally try to start again:
-                    // pythonBot.start_bot();
-                    return;
-                }
-                dynamic result = pythonBot.download_song(new PyInt(songId));
-                string path = (string)result;
-                Console.WriteLine($"Download result for songId {songId}: {path}");
-                await downloadService.AddToDownloads(artist, songId, path);
-            }
-            else
+            if (downloadService.GetDownloadById(songId) != null)
             {
-                Console.WriteLine("Python script is not initialized.");
+                Console.WriteLine($"Song with ID {songId} is already downloaded.");
             }
         }
+        catch (KeyNotFoundException)
+        {
+            // If the songId is not found, we proceed to download it.
+            Console.WriteLine($"Song with ID {songId} not found in downloads, proceeding to download.");
+            using (Py.GIL())
+            {
+                dynamic pythonBot = Py.Import("downloadScript");
+                string path = pythonBot.start_bot(new PyInt(songId));
+                Console.WriteLine($"Download result for songId {songId}: {path}");
+                downloadService.AddToDownloads(artist, songName, songId, path);
+            }
+        }
+        return Task.CompletedTask;
     }
 }

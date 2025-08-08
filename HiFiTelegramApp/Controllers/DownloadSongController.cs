@@ -17,10 +17,10 @@ namespace HiFiTelegramApp.Controllers
         }
 
         [HttpPost]
-        public async Task DownloadSong(string artist, int songId)
+        public async Task DownloadSong(string artist, string songName, int songId)
         {
             Console.WriteLine($"Download request for songId: {songId} by artist: {artist}");
-            await _downloadSongService.Download(artist, songId);
+             await _downloadSongService.Download(artist, songName, songId);
         }
     }
 }

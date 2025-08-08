@@ -11,6 +11,7 @@
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="ElectronNET.API" Version="23.6.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
     <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
   <ItemGroup>
@@ -40,5 +41,9 @@
       <None Update="Utilities\downloadScript.py">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="wwwroot\downloads\" />
+      <Folder Include="wwwroot\lib\jquery-ajax-unobtrusive\" />
     </ItemGroup>
 </Project>

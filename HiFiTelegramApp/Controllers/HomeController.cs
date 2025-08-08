@@ -22,14 +22,19 @@ namespace HiFiTelegramApp.Controllers
             return View();
         }
         [HttpGet("artists")]
-        public IActionResult ArtistsCollection()
+        public IActionResult ArtistsCollection(int offset = 0, int count = 0)
         {
             var artists = this._artistsService.Artists;
-            if (artists is null || !artists.Any())
+            if (artists is null || artists.Count == 0)
             {
                 _logger.LogError("Artists list is empty or null.");
                 return PartialView();
             }
+            if (count <= 0)
+            {
+                count = artists.Count;
+            }
+            artists = artists.Skip(offset).Take(count).ToList();
             return PartialView(artists);
         }
         [HttpGet("{artist}")]

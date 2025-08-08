@@ -15,7 +15,7 @@ public class FavoriteService
         var favorites = new List<FavoriteModel>();
         try
         {
-            var favaroites = JsonSerializer.Deserialize<List<FavoriteModel>>(File.ReadAllText(favoritesPath));
+            favorites = JsonSerializer.Deserialize<List<FavoriteModel>>(File.ReadAllText(favoritesPath));
         }
         catch {
             Console.WriteLine($"Error reading favorites from {favoritesPath}, initializing empty list.");

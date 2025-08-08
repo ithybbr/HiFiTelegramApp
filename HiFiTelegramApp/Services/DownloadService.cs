@@ -15,9 +15,18 @@ public class DownloadService
     {
         this._env = env;
         var downloadedIdsPath = Path.Combine(this._env.ContentRootPath, "Resources", "downloaded_songs.json");
-        var jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
-        this.Downloads = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent) ?? []; // Deserialize the string content
-        Console.WriteLine($"Loaded downloads from {Downloads[0].Name}");
+        var jsonContent = string.Empty;
+
+        try
+        {
+            jsonContent = File.ReadAllText(downloadedIdsPath); // Read the file content as a single string
+            this.Downloads = JsonSerializer.Deserialize<List<AudioModel>>(jsonContent) ?? []; // Deserialize the string content
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading downloaded_songs.json: {ex.Message}");
+            this.Downloads = [];
+        }
 
         this.IdsToSong = this.Downloads.ToDictionary(x => x.SongId, x => x);
     }
@@ -30,7 +39,7 @@ public class DownloadService
         return this.IdsToSong[songId];
     }
 
-    public Task AddToDownloads(string artist, int songId, string result)
+    public Task AddToDownloads(string artist, string songName, int songId, string result)
     {
         try
         {
@@ -39,16 +48,22 @@ public class DownloadService
             Console.WriteLine($"Adding songId {songId} with path {trimmed} to downloads.");
             Console.WriteLine($"Result: {result}");
             var text = File.ReadAllTextAsync(DownloadedIdsPath).Result;
-            var list = JsonSerializer.Deserialize<List<AudioModel>>(text)
-                       ?? [];
-
+            List<AudioModel> list = [];
+            try
+            {
+                list = JsonSerializer.Deserialize<List<AudioModel>>(text) ?? [];
+            }
+            catch (Exception)
+            {
+                list = [];
+            }
             AudioModel audioModel = new()
             {
-                Id = list.Count + 1,
+                Id = list!.Count + 1,
                 SongId = songId,
                 Path = trimmed,
                 Artist = artist,
-                Name = $"Song {songId}"
+                Name = songName
             };
             // 2) Append
             list.Add(audioModel);
@@ -62,6 +77,7 @@ public class DownloadService
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error adding songId {songId} to downloads: {ex.Message}");
             return Task.FromException(ex);
         }
     }

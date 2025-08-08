@@ -6,7 +6,8 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">artist</h1>
+    <h1 class="display-4">@artist</h1>
+    <div id="download-result" style="z-index: 1"></div>
     <ul class="list-group">
         @foreach (var song in Model)
         {
@@ -20,9 +21,11 @@
                     <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@song.Artist">
                         <button type="submit" class="btn btn-light">Add to favorites</button>
                     </form>
-                    <form asp-controller="DownloadSong" asp-action="DownloadSong" asp-route-artist="@song.Artist">
+                    <form method='post' data-ajax="true" data-ajax-method="post" data-ajax-loading="#loading-spinner" data-ajax-update="#download-result"
+                        action="@Url.Action("DownloadSong", "DownloadSong", new { artist = song.Artist })">
+						<input type="hidden" name="songName" value="@song.Name" />
 						<input type="hidden" name="songId" value="@song.SongId" />
-                        <button type="submit" class="btn btn-light">Download</button>
+                        <button type="submit" class="btn btn-light" onclick="disableButton.call(this)">Download</button>
                     </form>
                 </div>
             </li>

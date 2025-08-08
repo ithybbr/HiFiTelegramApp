@@ -1,44 +1,51 @@
 [
   {
-    "Id":  1,
+    "Id": 1,
+    "SongId": 4146,
+    "Path": "/downloads/03 - Saluki, 104, J. ROUH - XXX (feat. J. ROUH)(Explicit).flac",
+    "Artist": "104",
+    "Name": "Song 4146"
+  },
+  {
+    "Id": 2,
+    "SongId": 4211,
+    "Path": "/downloads/01_\u0414\u0430\u0439\u043C\u043E\u043D\u0434,_13\u0415\u0422\u0415\u0420_Moneypussyhouse_Prod_By_\u043C\u043E\u0434\u0434Explicit.flac",
+    "Artist": "13\u0415\u0422\u0415\u0420",
+    "Name": "Song 4211"
+  },
+  {
+    "Id": 3,
+    "SongId": 16614,
+    "Path": "/downloads/01 - 17 SEVENTEEN - \u041A\u043E\u043D\u0444\u0435\u0442\u043A\u0430(Explicit).flac",
+    "Artist": "17 SEVENTEEN",
+    "Name": "\u041A\u043E\u043D\u0444\u0435\u0442\u043A\u0430"
+  },
+  {
+    "Id": 4,
+    "SongId": 9073,
+    "Path": "/downloads/07 - mgk, 24hrs - SIGNS(Explicit).flac",
+    "Artist": "24hrs",
+    "Name": "SIGNS"
+  },
+  {
+    "Id": 5,
     "SongId": 5716,
-    "Path": "/downloads/1.flac",
+    "Path": "/downloads/01 - $NOT, A$AP Rocky - Doja(Explicit).flac",
     "Artist": "$NOT",
-    "Name": "0"
+    "Name": "Doja"
   },
   {
-    "Id":  2,
-    "SongId": 25887,
-    "Path": "/downloads/2.flac",
-    "Artist": "$uicideboy$",
-    "Name": "#1 Stunna"
+    "Id": 6,
+    "SongId": 25282,
+    "Path": "/downloads/01 - (G)I-DLE - Abracadabra.flac",
+    "Artist": "(G)I-DLE",
+    "Name": "Abracadabra"
   },
   {
-    "Id":  3,
-    "SongId": 25889,
-    "Path": "/downloads/01 - $uicideboy$ - 7th or St. Tammany(Explicit).flac",
-    "Artist": "$uicideboy$",
-    "Name": "7th or St. Tammany"
-  },
-  {
-    "Id":  4,
-    "SongId": 26027,
-    "Path": "/downloads/06_$uicideboy$_100_Blunts_DJ_Phantazm_RemixExplicit.flac",
-    "Artist": "$uicideboy$",
-    "Name": "100 Blunts (DJ Phantazm Remix) (Explicit)"
-  },
-  {
-    "Id":  5,
-    "SongId": 30512,
-    "Path": "/downloads/01 - Bladee, 16yrold - I Chose to Be This Way.flac",
-    "Artist": "16yrold",
-    "Name": "Song 30512"
-  },
-  {
-    "Id":  6,
-    "SongId": 14934,
-    "Path": "/downloads/02 - 347aidan - MEMORIES!.flac",
-    "Artist": "347aidan",
-    "Name": "Song 14934"
+    "Id": 8,
+    "SongId": 42016,
+    "Path": "/downloads/01 - Bonjr, .diedlonely - limerence.flac",
+    "Artist": ".diedlonely",
+    "Name": "limerence"
   }
 ]
