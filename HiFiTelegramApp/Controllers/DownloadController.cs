@@ -26,8 +26,21 @@ namespace HiFiTelegramApp.Controllers
 
             return PartialView(list);
         }
-
-        [HttpPost("remove/{songId:int}")]
+        [HttpGet("songby")]
+        public AudioModel Song(int id)
+        {
+            var nextSong = _downloadService.GetDownloadByIndex(id);
+            if (nextSong == null)
+            {
+                return new AudioModel
+                {
+                    Path = "No more songs available."
+                };
+            }
+            Console.WriteLine($"Next song path: {nextSong.Path}");
+            return nextSong;
+        }
+            [HttpPost("remove/{songId:int}")]
         public async Task DeleteSong(int songId)
         {
             Console.WriteLine($"Delete request for songId: {songId}");

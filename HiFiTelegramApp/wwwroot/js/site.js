@@ -16,19 +16,24 @@ function links() {
             });
         });
 }
-var artists = [];
+var search = false;
 function loadSearch() {
-    console.log('Loading search functionality');
-    artists = Array.from(document.querySelectorAll('.list-group-item')).map(artist => ({
-        artist,
-        innerText: artist.innerText.toLowerCase()
-    }));
     document.querySelector('.search #search-input').addEventListener('input', function () {
         console.log('Search input changed:', this.value);
-        artists.forEach(({ artist, innerText }) => {
-            const hide = this.value && innerText.indexOf(this.value) === -1;
-            artist.classList.toggle('d-none', hide);
-        });
+        $.ajax({
+            url: "/Home/search",
+            data: { query: this.value},
+            type: 'GET',
+            success: function (data) {
+                var temp = $('<div>').html(data);
+                var rows = temp.find('li').map(function () { return this.outerHTML; }).get();
+                clusterize.update(rows);
+                search = true;
+            },
+            failure: function (xhr, status, error) {
+                console.error('Error appending data:', status, error);
+            }
+        })
     }, 450);
 }
 
@@ -48,20 +53,55 @@ function disableButton() {
 function showSpinner() { document.getElementById('loading-spinner').style.display = 'block'; }
 function hideSpinner() { document.getElementById('loading-spinner').style.display = 'none'; }
 
-var data = ['<li>…</li>'];
-var clusterize = new Clusterize({
-    row: data,
-    scrollId: 'scrollArea',
-    contentId: 'contentArea'
-});
+var clusterize;
 function loadAjax(url) {
     showSpinner();
     console.log('Loading URL:', url);
     $.ajax({
         url: url,
         type: 'GET',
-        success: function (data) {
-            $('#append-ajax').html(data);
+        success: function (html) {
+            search = false; // Reset search state
+            try {
+                activeCss.disabled = true;
+            }
+            catch (e) {
+                console.error('Error removing previous CSS:', e);
+            }
+            var css = url.split('/').pop().concat('-css');
+            console.log('Loading CSS:', css);
+            try {
+                enableCSS(css);
+            }
+            catch (e) {
+                console.error('Error enabling CSS:', e);
+            }
+            $('#append-ajax').html(html);
+            if (url == "/Home/artists") {
+                var data = ['<li>…</li>'];
+                clusterize = new Clusterize({
+                    row: data,
+                    scrollId: 'scrollArea',
+                    contentId: 'contentArea',
+                    callbacks: {
+                        scrollingProgress: function (progress) {
+                            if (!search && progress > 60) {
+                                appendClusterize("/Home/list");
+                            }
+                        }
+                    }
+                });
+                clusterize.clear();
+                appendClusterize("/Home/list");
+            }
+            else {
+            }
+            try {
+                loadSearch();
+            }
+            catch (e) {
+                console.error('Error loading search functionality:', e);
+            }
             links();
             hideSpinner();
         },
@@ -71,111 +111,26 @@ function loadAjax(url) {
         }
     })
 }
-var audio;
-var id;
-var volume = 0.25;
-var duration = 0;
-var artistLabel;
-var songLabel;
-var timeLabel;
-var durLabel;
-var progress;
-var interval;
-var nextSong;
-var previousSong;
-var playerloaded = false;
-function audioPlayer({ id, songid, artist, name, path }) {
-    if (!playerloaded) {
-        loadPlayer();
-        playerloaded = true;
-    }
-    timeLabel.innerHTML = "0:00";
-    progress.value = 0;
-    artistLabel.innerHTML = artist;
-    songLabel.innerHTML = name;
-    Howler.stop();
-    audio = new Howl({
-        src: [path],
-        html5: true,
-        volume: volume,
-        onplay: updateTime,   // start polling when play begins
-        onend: () => {        // clean up when finished
-            timeLabel.innerHTML = "0:00";
-            progress.value = 0;
-            clearInterval(interval);
-            playNext();
+function appendClusterize(url) {
+    console.log('Appending URL:', url);
+    console.log('Current rows amount:', clusterize.getRowsAmount());
+    $.ajax({
+        url: url,
+        data: { offset: clusterize.getRowsAmount()},
+        type: 'GET',
+        success: function (data) {
+            var temp = $('<div>').html(data);
+            var rows = temp.find('li').map(function () { return this.outerHTML; }).get();
+            clusterize.append(rows);
+            links();
         },
-        onload: () => {
-            duration = audio.duration();
-            durLabel.innerHTML = convertSeconds(duration);
-            progress.step = (1 / duration * 100); // Set step based on duration
-        },
-        onplay: () => {
-            updateTime();
-            document.querySelector('.player').style.visibility = "visible";
+        failure: function (xhr, status, error) {
+            console.error('Error appending data:', status, error);
         }
-    });
-    previousSong.value = id - 1;
-    nextSong.value = id + 1;
-    id = audio.play();
+    })
 }
-function updateTime() {
-    clearInterval(interval);
-    let tick = 0;
-    interval = setInterval(() => {
-        if (!audio.playing()) return clearInterval(interval);
-        const time = audio.seek();
-        progress.value = (time / duration) * 100;
-        timeLabel.innerHTML = convertSeconds(time);
-    }, 1000);
-}
-function convertSeconds(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    seconds = Math.floor(seconds % 60);
-    if (seconds < 10) {
-        seconds = '0' + seconds;
-    }
-    return minutes + ':' + seconds;
-}
-function loadPlayer() {
-    artistLabel = document.querySelector('.player #artist');
-    songLabel = document.querySelector('.player #song');
-    timeLabel = document.querySelector('.player #time');
-    durLabel = document.querySelector('.player #duration');
-    nextSong = document.querySelector('.player #next');
-    previousSong = document.querySelector('.player #previous');
-    document.querySelector('.player #player-ps-btn')
-        .addEventListener('click', function () {
-            if (audio.playing()) {
-                audio.pause();
-                this.classList.add('play');
-                this.classList.remove('pause');
-            }
-            else {
-                this.classList.remove('play');
-                this.classList.add('pause');
-                audio.play();
-            }
-        });
-    var vol = document.querySelector('.player #volume');
-    vol.addEventListener('input', function () {
-        volume = this.value / 100;
-        audio.volume(volume);
-        console.log('Volume changed to:', this.value);
-    });
-    progress = document.querySelector('.player #progress');
-    progress.addEventListener('input', function () {
-        pr = this.value / 100;
-        audio.seek(pr * duration);
-        console.log('Seek to:', this.value);
-    });
-    nextSong.addEventListener('click', function () {
-        playNext();
-    });
-    previousSong.addEventListener('click', function () {
-        _ = document.querySelector('.audio-data-' + previousSong.value).click();
-    });
-}
-function playNext() {
-    _ = document.querySelector('.audio-data-' + nextSong.value).click();
+var activeCss;
+function enableCSS(css) {
+    activeCss = document.getElementById(css);
+    activeCss.disabled = false;
 }

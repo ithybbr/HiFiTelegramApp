@@ -1,29 +1,16 @@
-﻿@model IEnumerable<string>
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="artists">
     <div class="row">
-    <h1 class="display-4">Welcome home</h1>
     <div class="search">
 			<input type="text" class="form-control" id="search-input" placeholder="Search artists...">
     </div>
     </div>
     <div id="scrollArea" class="clusterize-scroll">
         <ul class="list-group" id="contentArea">
-            @foreach (var artist in Model)
-            {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a class="link" data-url="@Url.Action("Artist", "Home", new { artist = artist })">@artist</a>
-                    <div class="d-flex gap-2">
-                        <form asp-controller="Favorite" asp-action="AddToFavoriteArtists" asp-route-artist="@artist">
-                            <button type="submit" class="btn btn-light">Add to favorites</button>
-                        </form>
-                    </div>
-                </li>
-            }
+            <li class="clusterize-no-data">Loading data…</li>
         </ul>
     </div>
 </div>

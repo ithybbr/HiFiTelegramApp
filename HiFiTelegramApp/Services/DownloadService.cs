@@ -38,7 +38,10 @@ public class DownloadService
     {
         return this.IdsToSong[songId];
     }
-
+    public AudioModel GetDownloadByIndex(int id)
+    {
+        return this.Downloads[id];
+    }
     public Task AddToDownloads(string artist, string songName, int songId, string result)
     {
         try

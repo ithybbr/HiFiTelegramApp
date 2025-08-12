@@ -1,0 +1,105 @@
+﻿/* Cleaned Artist List Styles */
+
+/* Page */
+.artists {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+/* Search */
+.search {
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+    .search .form-control {
+        border-radius: 25px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: #fff;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+        .search .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search .form-control:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+/* List items */
+.list-group-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(5px);
+    margin-bottom: 0.5rem;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+    .list-group-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Links inside list items */
+    .list-group-item .link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+        .list-group-item .link:hover {
+            color: #fbbf24;
+            text-decoration: none;
+        }
+
+        .list-group-item .link::before {
+            content: "♪";
+            margin-right: 0.75rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+    .list-group-item:hover .link::before {
+        opacity: 1;
+    }
+
+/* Buttons */
+.btn-light {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-light:hover {
+    transform: translateY(-1px);
+}
+
+/* Accessibility & states */
+.list-group-item .link:focus,
+.btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.loading .list-group-item {
+    opacity: 0.5;
+    pointer-events: none;
+}
