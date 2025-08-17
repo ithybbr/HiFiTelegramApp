@@ -19,7 +19,17 @@ namespace HiFiTelegramApp.Controllers
 
         public IActionResult Index()
         {
+            return PartialView();
+        }
+        [HttpGet("favorites")]
+        public IActionResult FavoriteList()
+        {
             var favoriteArtists = this._favoriteService.GetFavorites();
+            if (favoriteArtists is null || favoriteArtists.Count == 0)
+            {
+                _logger.LogError("Favorite artists list is empty or null.");
+                return PartialView();
+            }
             return PartialView(favoriteArtists);
         }
         [HttpPost("add")]
@@ -36,16 +46,19 @@ namespace HiFiTelegramApp.Controllers
             }
         }
         [HttpPost("remove")]
-        public async Task RemoveFromFavoriteArtists(string artist)
+        public IActionResult RemoveFromFavoriteArtists(string artist)
         {
             try
             {
-                await this._favoriteService.RemoveFromFavoriteArtists(artist);
+                this._favoriteService.RemoveFromFavoriteArtists(artist);
                 Console.WriteLine(StatusCode(201));
+                var favoriteArtists = this._favoriteService.GetFavorites();
+                return PartialView("FavoriteList", favoriteArtists);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(StatusCode(500, ex));
+                return PartialView("FavoriteList");
             }
         }
         

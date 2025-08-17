@@ -69,6 +69,7 @@ public class FavoriteService
             var jsonContent = File.ReadAllText(favoritesPath);
             var json = JsonSerializer.Deserialize<List<FavoriteModel>>(jsonContent) ?? [];
             json.RemoveAll(x => x.Artist == artist);
+            Favorites.RemoveAll(x => x.Artist == artist);
             File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
             return Task.CompletedTask;
         }

@@ -1,30 +1,10 @@
-﻿@model IEnumerable<FavoriteModel>
-@{
+﻿@{
     ViewData["Title"] = "Favorites";
 }
 
-<div class="text-center">
+<div class="text-center" id="favorites">
     <h1 class="display-4">Favorites</h1>
+    <div id="delete-result"></div>
     <ul class="list-group">
-        @foreach (var entry in Model)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a class="link" data-url="@Url.Action("Artist", "Home", new { artist = entry.Artist })">@entry.Artist</a>
-                <div class="d-flex gap-2">
-                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteArtists" asp-route-artist="@entry.Artist">
-                        <button type="submit" class="btn btn-light">Remove from favorites</button>
-                    </form>
-                </div>
-                @foreach (var song in entry.Songs)
-                {
-                    <div>@song.Name</div>
-                    <div>@song.SongId</div>
-                    <form asp-controller="Favorite" asp-action="RemoveFromFavoriteSongs" asp-route-artist="@entry.Artist" asp-route-songId="@song.SongId">
-                        <input type="hidden" value="@song.Name"/>
-                        <button type="submit" class="btn btn-light">Remove from favorites</button>
-                    </form>
-                }
-            </li>
-        }
     </ul>
 </div>

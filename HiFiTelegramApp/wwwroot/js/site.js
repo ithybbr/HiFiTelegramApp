@@ -1,5 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.nav-link.text-dark[data-url]')
+    document.querySelectorAll('.nav-link[data-url]')
         .forEach(link => {
             link.addEventListener('click', function () {
                 console.log('Link clicked:', this.dataset.url);
@@ -102,6 +102,7 @@ function loadAjax(url) {
             catch (e) {
                 console.error('Error loading search functionality:', e);
             }
+            loadFavorites();
             links();
             hideSpinner();
         },
@@ -129,8 +130,26 @@ function appendClusterize(url) {
         }
     })
 }
+//$(document).on('submit', 'form', function (e) {
+//    e.preventDefault();
+//});
 var activeCss;
 function enableCSS(css) {
     activeCss = document.getElementById(css);
     activeCss.disabled = false;
+}
+function loadFavorites() {
+    if (document.querySelector('#favorites')) {
+        console
+        $.ajax({
+            url: '/favorite/favorites',
+            method: 'GET',
+            success: function (data) {
+                $('.list-group').html(data);
+            },
+            error: function (error) {
+                console.error('Error fetching favorites:', error);
+            }
+        })
+    }
 }
