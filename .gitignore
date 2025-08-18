@@ -370,3 +370,5 @@ FodyWeavers.xsd
 /.idea/.idea.HiFiTelegramApp/.idea/vcs.xml
 /HiFiTelegramApp/wwwroot/downloads
 /HiFiTelegramApp/python
+/HiFiTelegramApp/.env
+/git-filter-repo
