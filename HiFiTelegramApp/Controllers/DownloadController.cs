@@ -15,7 +15,7 @@ namespace HiFiTelegramApp.Controllers
             _logger = logger;
             _downloadService = downloadService;
         }
-
+        [HttpGet("download")]
         public IActionResult Index()
         {
             var list = _downloadService.GetDownloads();

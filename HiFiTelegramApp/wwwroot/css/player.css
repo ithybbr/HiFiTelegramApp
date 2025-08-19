@@ -20,7 +20,8 @@
 
 .player {
     visibility: hidden;
-    background-color: #ffffff;
+    background-color: #151922;
+    color: #F4FDFF;
     border: 1px solid #333;
     border-radius: 8px;
     width: 100%;
@@ -100,14 +101,6 @@
     overflow: hidden;
 }
 
-.player button.play::after {
-    content: "Play";
-}
-
-.player button.pause::after {
-    content: "Pause";
-}
-
 /* ====================================
    VOLUME CONTROLS (RIGHT)
    ==================================== */
@@ -128,7 +121,7 @@
 
 .volume-container .form-label {
     color: #b3b3b3;
-    margin: 0;
+    margin-top: 2.3px;
     cursor: pointer;
     transition: color 0.2s ease;
 }

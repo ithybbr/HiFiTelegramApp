@@ -38,3 +38,28 @@ body {
     transform: translate(-50%, -50%);
     display: none;
 }
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 350;
+    line-height: 1.2;
+    color: #fff;
+    padding: 1rem;
+}
+.bi {
+    font-family: "bootstrap-icons";
+    font-size: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.icon-btn {
+    background: none; /* remove default button background */
+    border: none; /* remove borders */
+    padding: 0; /* no extra padding */
+    margin: 0; /* optional, keeps spacing tight */
+    cursor: pointer; /* make it look clickable */
+    display: inline-flex; /* centers the icon */
+    align-items: center;
+    justify-content: center;
+}

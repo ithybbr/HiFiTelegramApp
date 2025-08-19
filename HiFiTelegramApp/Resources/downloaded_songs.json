@@ -5,5 +5,26 @@
     "Path": "/downloads/03_Real_Recognize_Rio,_21_Lil_Harold,_SG_Tip,_Millie_Down_Bad_feat.flac",
     "Artist": "21 Lil Harold",
     "Name": "Down Bad (feat. Millie Go Lightly)"
+  },
+  {
+    "Id": 2,
+    "SongId": 20617,
+    "Path": "/downloads/07 - 5 Seconds Of Summer - 500 Years Of Winter - Pizza Song.flac",
+    "Artist": "5 Seconds Of Summer",
+    "Name": "500 Years Of Winter - Pizza Song"
+  },
+  {
+    "Id": 3,
+    "SongId": 388,
+    "Path": "/downloads/02 - 44phantom - freak(Explicit).flac",
+    "Artist": "44phantom",
+    "Name": "freak"
+  },
+  {
+    "Id": 4,
+    "SongId": 26000,
+    "Path": "/downloads/02 - $uicideboy$ - Say Cheese and Die(Explicit).flac",
+    "Artist": "$uicideboy$",
+    "Name": "Say Cheese and Die"
   }
 ]

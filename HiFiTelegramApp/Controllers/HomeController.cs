@@ -57,7 +57,7 @@ namespace HiFiTelegramApp.Controllers
                 .ToList();
             return PartialView("ArtistsList", filteredArtists);
         }
-        [HttpGet("{artist}")]
+        [HttpGet("artist/{artist}")]
         public IActionResult Artist(string artist)
         {
             var songs = this._artistsService.GetSongs(artist);

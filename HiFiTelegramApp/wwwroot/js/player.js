@@ -77,12 +77,12 @@ function loadPlayer() {
         .addEventListener('click', function () {
             if (audio.playing()) {
                 audio.pause();
-                this.classList.add('play');
-                this.classList.remove('pause');
+                this.classList.add('bi-play-circle-fill');
+                this.classList.remove('bi-pause-circle-fill');
             }
             else {
-                this.classList.remove('play');
-                this.classList.add('pause');
+                this.classList.remove('bi-play-circle-fill');
+                this.classList.add('bi-pause-circle-fill');
                 audio.play();
             }
         });

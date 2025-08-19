@@ -9,6 +9,9 @@
     <link href="~/lib/clusterize/clusterize.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" id="artists-css" href="~/css/artists.css" disabled />
+    <link rel="stylesheet" id="artist-css" href="~/css/artist.css" disabled />
+    <link rel="stylesheet" id="favorite-css" href="~/css/favorite.css" disabled />
+    <link rel="stylesheet" id="download-css" href="~/css/download.css" disabled />
     <link rel="stylesheet" href="~/css/player.css" />
 </head>
 <body>
@@ -57,9 +60,9 @@
                 </div>
                 <div class="player-controls">
                     <div class="control-buttons">
-                        <button id="previous" class="btn btn-secondary"> Previous </button>
-                        <button id="player-ps-btn" class="btn btn-primary ps pause"></button>
-                        <button id="next" class="btn btn-secondary"> Next </button>
+                        <button id="previous" class="icon-btn"> <i class="bi text-light bi-skip-start-circle-fill"></i> </button>
+                        <button class="icon-btn"><i id="player-ps-btn" class="bi text-light bi-pause-circle-fill"></i></button>
+                        <button id="next" class="icon-btn"> <i class="bi text-light bi-skip-end-circle-fill"></i> </button>
                     </div>
 				</div>
                 <div class="progress-container">

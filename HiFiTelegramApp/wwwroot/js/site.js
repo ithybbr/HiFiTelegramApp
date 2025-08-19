@@ -68,7 +68,7 @@ function loadAjax(url) {
             catch (e) {
                 console.error('Error removing previous CSS:', e);
             }
-            var css = url.split('/').pop().concat('-css');
+            var css = url.split('/')[2].concat('-css');
             console.log('Loading CSS:', css);
             try {
                 enableCSS(css);

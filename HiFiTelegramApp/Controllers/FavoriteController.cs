@@ -16,7 +16,7 @@ namespace HiFiTelegramApp.Controllers
             _logger = logger;
             _favoriteService = favoriteService;
         }
-
+        [HttpGet("favorite")]
         public IActionResult Index()
         {
             return PartialView();
