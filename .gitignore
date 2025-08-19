@@ -372,3 +372,4 @@ FodyWeavers.xsd
 /HiFiTelegramApp/python
 /HiFiTelegramApp/.env
 /git-filter-repo
+/HiFiTelegramApp/hifimusic_bot.session
