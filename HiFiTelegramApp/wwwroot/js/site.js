@@ -29,6 +29,7 @@ function loadSearch() {
                 var rows = temp.find('li').map(function () { return this.outerHTML; }).get();
                 clusterize.update(rows);
                 search = true;
+                links();
             },
             failure: function (xhr, status, error) {
                 console.error('Error appending data:', status, error);
@@ -85,7 +86,7 @@ function loadAjax(url) {
                     contentId: 'contentArea',
                     callbacks: {
                         scrollingProgress: function (progress) {
-                            if (!search && progress > 60) {
+                            if (!search && progress > 60 && progress !== 100) {
                                 appendClusterize("/Home/list");
                             }
                         }
@@ -146,6 +147,7 @@ function loadFavorites() {
             method: 'GET',
             success: function (data) {
                 $('.list-group').html(data);
+                links();
             },
             error: function (error) {
                 console.error('Error fetching favorites:', error);

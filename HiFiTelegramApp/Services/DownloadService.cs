@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ElectronNET.API;
@@ -85,12 +86,14 @@ public class DownloadService
         }
     }
 
-    public Task DeleteFromDownloads(int songId)
+    public Task DeleteFromDownloads(int songId, string path)
     {
         try
         {
-            var downloadsPath = Path.Combine(_env.ContentRootPath, "Downloads");
-            Directory.EnumerateFiles(downloadsPath, $"*{songId}*").ToList().ForEach(File.Delete);
+            var downloadsPath = Path.Combine(_env.ContentRootPath, "wwwroot", path.TrimStart('/').Replace('/', '\\'));
+            Console.WriteLine($"Deleting songId {songId} with path {downloadsPath} from downloads.");
+            File.Delete(downloadsPath);
+            RemoveFromDownloads(songId).Wait();
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -102,10 +105,13 @@ public class DownloadService
     {
         try
         {
-            var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_id.txt");
-            var content = File.ReadAllText(DownloadedIdsPath);
-            content = content.Replace(songId.ToString(), string.Empty);
-            File.WriteAllText(DownloadedIdsPath, content);
+            var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
+            var list = JsonSerializer.Deserialize<List<AudioModel>>(File.ReadAllText(DownloadedIdsPath));
+            list!.RemoveAll(x => x.SongId == songId);
+            var opts = new JsonSerializerOptions { WriteIndented = true };
+            var newJson = JsonSerializer.Serialize(list, opts);
+            Downloads.RemoveAll(x => x.SongId == songId);
+            File.WriteAllTextAsync(DownloadedIdsPath, newJson);
             return Task.CompletedTask;
         }
         catch (Exception ex)

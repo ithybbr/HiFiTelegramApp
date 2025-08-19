@@ -40,11 +40,11 @@ namespace HiFiTelegramApp.Controllers
             Console.WriteLine($"Next song path: {nextSong.Path}");
             return nextSong;
         }
-            [HttpPost("remove/{songId:int}")]
-        public async Task DeleteSong(int songId)
+        [HttpPost("remove")]
+        public async Task DeleteSong(int songId, string path)
         {
-            Console.WriteLine($"Delete request for songId: {songId}");
-            await _downloadService.DeleteFromDownloads(songId);
+            Console.WriteLine($"Delete request for songId: {songId} {path}");
+            await _downloadService.DeleteFromDownloads(songId, path);
         }
     }
 }
