@@ -4,20 +4,23 @@
     "SongId": 388,
     "Path": "/downloads/02 - 44phantom - freak(Explicit).flac",
     "Artist": "44phantom",
-    "Name": "freak"
+    "Name": "freak",
+    "IsFavorite": false
   },
   {
     "Id": 2,
     "SongId": 25369,
     "Path": "/downloads/07 - (G)I-DLE - Lucid.flac",
     "Artist": "(G)I-DLE",
-    "Name": "Lucid"
+    "Name": "Lucid",
+    "IsFavorite": false
   },
   {
     "Id": 3,
     "SongId": 395,
     "Path": "/downloads/01 - 44phantom - f.u.n!(Explicit).flac",
     "Artist": "44phantom",
-    "Name": "f.u.n!"
+    "Name": "f.u.n!",
+    "IsFavorite": false
   }
 ]

@@ -46,5 +46,12 @@ namespace HiFiTelegramApp.Controllers
             Console.WriteLine($"Delete request for songId: {songId} {path}");
             await _downloadService.DeleteFromDownloads(songId, path);
         }
+        [HttpPost("favorite")]
+        public async Task<IActionResult> ToggleFavorite(int songId)
+        {
+            Console.WriteLine($"Toggle favorite for songId: {songId}");
+            await _downloadService.ToggleFavorite(songId);
+            return Ok();
+        }
     }
 }

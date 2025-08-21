@@ -12,11 +12,15 @@ var nextSong;
 var previousSong;
 var songId;
 var playerloaded = false;
+var pButton;
 function audioPlayer({ id, songid, artist, name, path }) {
     if (!playerloaded) {
         loadPlayer();
         playerloaded = true;
     }
+    pButton.classList.add('bi-pause-circle-fill');
+    pButton.classList.remove('bi-play-circle-fill');
+    progress.removeAttribute('style');
     songid = songid;
     timeLabel.innerHTML = "0:00";
     progress.value = 0;
@@ -55,6 +59,7 @@ function updateTime() {
         if (!audio.playing()) return clearInterval(interval);
         const time = audio.seek();
         progress.value = (time / duration) * 100;
+        progress.style.background = `linear-gradient(to right, white ${progress.value + 3}%, #888 ${progress.value + 3}%)`;
         timeLabel.innerHTML = convertSeconds(time);
     }, 1000);
 }
@@ -73,19 +78,19 @@ function loadPlayer() {
     durLabel = document.querySelector('.player #duration');
     nextSong = document.querySelector('.player #next');
     previousSong = document.querySelector('.player #previous');
-    document.querySelector('.player #player-ps-btn')
-        .addEventListener('click', function () {
-            if (audio.playing()) {
-                audio.pause();
-                this.classList.add('bi-play-circle-fill');
-                this.classList.remove('bi-pause-circle-fill');
-            }
-            else {
-                this.classList.remove('bi-play-circle-fill');
-                this.classList.add('bi-pause-circle-fill');
-                audio.play();
-            }
-        });
+    pButton = document.querySelector('.player #player-ps-btn')
+    pButton.addEventListener('click', function () {
+        if (audio.playing()) {
+            audio.pause();
+            this.classList.add('bi-play-circle-fill');
+            this.classList.remove('bi-pause-circle-fill');
+        }
+        else {
+            this.classList.remove('bi-play-circle-fill');
+            this.classList.add('bi-pause-circle-fill');
+            audio.play();
+        }
+    });
     var vol = document.querySelector('.player #volume');
     vol.addEventListener('input', function () {
         volume = this.value / 100;
@@ -95,6 +100,7 @@ function loadPlayer() {
     progress = document.querySelector('.player #progress');
     progress.addEventListener('input', function () {
         pr = this.value / 100;
+        progress.style.background = `linear-gradient(to right, white ${this.value + 3}%, #888 ${this.value + 3}%)`;
         audio.seek(pr * duration);
         console.log('Seek to:', this.value);
     });

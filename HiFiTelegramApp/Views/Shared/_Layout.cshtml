@@ -61,16 +61,16 @@
                 </div>
                 <div class="player-controls">
                     <div class="control-buttons">
-                        <button id="previous" class="icon-btn"> <i class="bi text-light bi-skip-start-circle-fill"></i> </button>
+                        <button id="previous" class="icon-btn"> <i class="bi text-light bi-skip-start-fill side-btn"></i> </button>
                         <button class="icon-btn"><i id="player-ps-btn" class="bi text-light bi-pause-circle-fill"></i></button>
-                        <button id="next" class="icon-btn"> <i class="bi text-light bi-skip-end-circle-fill"></i> </button>
+                        <button id="next" class="icon-btn"> <i class="bi text-light bi-skip-end-fill side-btn"></i> </button>
                     </div>
 				</div>
                 <div class="progress-container">
                     <label id="time">0:00</label>
 					<div class="col-md-12 text-center">
                         <div class="progress-bar">
-                            <input type="range" class="form-range" id="progress" value="0">
+                            <input type="range" id="progress" value="0" min="0" max="100">
 						</div>
                     </div>
                     <label id="duration">0:00</label>

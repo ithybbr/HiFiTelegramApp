@@ -7,7 +7,7 @@ namespace HiFiTelegramApp.Services;
 public class FavoriteService
 {
     private readonly IWebHostEnvironment _env;
-    
+
     public FavoriteService(IWebHostEnvironment env)
     {
         this._env = env;
@@ -126,6 +126,16 @@ public class FavoriteService
         {
             return Task.FromException(ex);
         }
+    }
+    
+    public bool IsFavoriteArtist(string artist)
+    {
+        return this.Favorites.Any(x => x.Artist == artist);
+    }
+
+    public bool IsFavoriteSong(string artist, int songId)
+    {
+        return this.Favorites.Any(x => x.Artist == artist && x.Songs.Any(s => s.SongId == songId));
     }
 
     private List<FavoriteModel> Favorites { get; set; }

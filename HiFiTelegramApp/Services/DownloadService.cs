@@ -11,9 +11,11 @@ namespace HiFiTelegramApp.Services;
 public class DownloadService
 {
     private readonly IWebHostEnvironment _env;
-    
-    public DownloadService(IWebHostEnvironment env)
+    private readonly FavoriteService favoriteService;
+
+    public DownloadService(IWebHostEnvironment env, FavoriteService favoriteService)
     {
+        this.favoriteService = favoriteService;
         this._env = env;
         var downloadedIdsPath = Path.Combine(this._env.ContentRootPath, "Resources", "downloaded_songs.json");
         var jsonContent = string.Empty;
@@ -67,7 +69,8 @@ public class DownloadService
                 SongId = songId,
                 Path = trimmed,
                 Artist = artist,
-                Name = songName
+                Name = songName,
+                IsFavorite = favoriteService.IsFavoriteSong(artist, songId)
             };
             // 2) Append
             list.Add(audioModel);
@@ -113,6 +116,36 @@ public class DownloadService
             Downloads.RemoveAll(x => x.SongId == songId);
             File.WriteAllTextAsync(DownloadedIdsPath, newJson);
             return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            return Task.FromException(ex);
+        }
+    }
+    public bool IsDownloaded(int songId)
+    {
+        return this.IdsToSong.ContainsKey(songId);
+    }
+    public Task ToggleFavorite(int songId)
+    {
+        try
+        {
+            if (this.IdsToSong.TryGetValue(songId, out AudioModel? song))
+            {
+                song.IsFavorite = !song.IsFavorite;
+                var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
+                var list = JsonSerializer.Deserialize<List<AudioModel>>(File.ReadAllText(DownloadedIdsPath)) ?? [];
+                var index = list.FindIndex(x => x.SongId == songId);
+                if (index != -1)
+                {
+                    list[index] = song; // Update the song in the list
+                    var opts = new JsonSerializerOptions { WriteIndented = true };
+                    var newJson = JsonSerializer.Serialize(list, opts);
+                    File.WriteAllTextAsync(DownloadedIdsPath, newJson);
+                }
+                return Task.CompletedTask;
+            }
+            return Task.FromException(new Exception("Song not found in downloads"));
         }
         catch (Exception ex)
         {
