@@ -143,6 +143,14 @@ public class DownloadService
                     var newJson = JsonSerializer.Serialize(list, opts);
                     File.WriteAllTextAsync(DownloadedIdsPath, newJson);
                 }
+                if (song.IsFavorite)
+                {
+                    favoriteService.AddToFavoriteSongs(song.Artist, song.Name, song.SongId, true).Wait();
+                }
+                else
+                {
+                    favoriteService.RemoveFromFavoriteSongs(song.Artist, song.Name, song.SongId).Wait();
+                }
                 return Task.CompletedTask;
             }
             return Task.FromException(new Exception("Song not found in downloads"));

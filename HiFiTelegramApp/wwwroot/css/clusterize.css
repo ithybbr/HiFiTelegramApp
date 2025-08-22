@@ -1,0 +1,29 @@
+.clusterize-scroll {
+    opacity: 0.7;
+    scrollbar-color: #CBCBCB #13242b; /* thumb color | track color */
+}
+.clusterize-scroll::-webkit-scrollbar-button {
+    display: none !important; /* hide the scrollbar buttons */
+    width: 0px !important;
+    height: 0px !important;
+}
+
+/* WebKit (Chrome, Safari, Edge, Opera) */
+.clusterize-scroll::-webkit-scrollbar {
+    width: 8px; /* scrollbar width */
+    height: 8px; /* scrollbar height (for horizontal) */
+}
+
+.clusterize-scroll::-webkit-scrollbar-track {
+    background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027); /* Chrome 10-25, Safari 5.1-6 */
+    border-radius: 10px;
+}
+
+.clusterize-scroll::-webkit-scrollbar-thumb {
+    background: #CBCBCB; /* thumb color */
+    border-radius: 10px;
+}
+
+.clusterize-scroll::-webkit-scrollbar-thumb:hover {
+    background: #388e3c; /* darker on hover */
+}

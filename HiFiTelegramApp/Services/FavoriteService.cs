@@ -34,7 +34,7 @@ public class FavoriteService
             return [];
         }
     }
-     public Task AddToFavoriteArtists(string artist)
+    public Task AddToFavoriteArtists(string artist)
     {
         Console.WriteLine($"Adding {artist} to favorites");
         try
@@ -60,7 +60,6 @@ public class FavoriteService
             return Task.FromException(ex);
         }
     }
-
     public Task RemoveFromFavoriteArtists(string artist)
     {
         try
@@ -79,7 +78,7 @@ public class FavoriteService
         }
     }
     
-    public Task AddToFavoriteSongs(string artist, string song, int songId)
+    public Task AddToFavoriteSongs(string artist, string song, int songId, bool fromDownloads)
     {
         try
         {
@@ -88,6 +87,7 @@ public class FavoriteService
             if (entry == null)
             {
                 AddToFavoriteArtists(artist);
+                entry = this.Favorites.FirstOrDefault(x => x.Artist == artist);
             }
             entry!.Songs.Add(new FavoriteSongModel
             {
@@ -98,6 +98,10 @@ public class FavoriteService
             this.Favorites.RemoveAll(x => x.Artist == artist);
             this.Favorites.Add(entry);
             File.WriteAllText(favoritesPath, JsonSerializer.Serialize(this.Favorites));
+            if (!fromDownloads)
+            {
+                CheckDownloads(songId, false).Wait();
+            }
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -120,6 +124,7 @@ public class FavoriteService
             }
             entry!.Songs.RemoveAll(x => x.SongId == songId);
             File.WriteAllText(favoritesPath, JsonSerializer.Serialize(json));
+            CheckDownloads(songId, false).Wait(); // Remove from downloads if it was a favorite
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -127,7 +132,29 @@ public class FavoriteService
             return Task.FromException(ex);
         }
     }
-    
+
+    public Task CheckDownloads(int songId, bool favorite)
+    {
+        try
+        {
+            var DownloadedIdsPath = Path.Combine(_env.ContentRootPath, "Resources", "downloaded_songs.json");
+            var list = JsonSerializer.Deserialize<List<AudioModel>>(File.ReadAllText(DownloadedIdsPath)) ?? [];
+            var index = list.FindIndex(x => x.SongId == songId);
+            if (index != -1)
+            {
+                list[index].IsFavorite = favorite;
+                var opts = new JsonSerializerOptions { WriteIndented = true };
+                var newJson = JsonSerializer.Serialize(list, opts);
+                File.WriteAllTextAsync(DownloadedIdsPath, newJson);
+            }
+            return Task.CompletedTask;
+    }
+        catch (Exception ex)
+        {
+            return Task.FromException(ex);
+        }
+    }
+
     public bool IsFavoriteArtist(string artist)
     {
         return this.Favorites.Any(x => x.Artist == artist);

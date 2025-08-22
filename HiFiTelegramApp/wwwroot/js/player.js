@@ -91,8 +91,40 @@ function loadPlayer() {
             audio.play();
         }
     });
+    var volIcon = document.querySelector('.player #volume-icon');
+    volIcon.addEventListener('click', function () {
+        if (vol.value > 0) {
+            vol.value = 0;
+            audio.volume(0);
+            this.classList.remove('bi-volume-up');
+            this.classList.remove('bi-volume-down');
+            this.classList.add('bi-volume-mute');
+        }
+        else {
+            vol.value = 25;
+            audio.volume(0.25);
+            this.classList.remove('bi-volume-mute');
+            this.classList.remove('bi-volume-up');
+            this.classList.add('bi-volume-down');
+        }
+    });
     var vol = document.querySelector('.player #volume');
     vol.addEventListener('input', function () {
+        if (this.value == 0) {
+            volIcon.classList.remove('bi-volume-up');
+            volIcon.classList.remove('bi-volume-down');
+            volIcon.classList.add('bi-volume-mute');
+        }
+        if (this.value > 0 && this.value < 70) {
+            volIcon.classList.remove('bi-volume-up');
+            volIcon.classList.remove('bi-volume-mute');
+            volIcon.classList.add('bi-volume-down');
+        }
+        if (this.value >= 70) {
+            volIcon.classList.remove('bi-volume-down');
+            volIcon.classList.remove('bi-volume-mute');
+            volIcon.classList.add('bi-volume-up');
+        }
         volume = this.value / 100;
         audio.volume(volume);
         console.log('Volume changed to:', this.value);

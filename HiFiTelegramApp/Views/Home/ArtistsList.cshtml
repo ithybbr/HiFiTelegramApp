@@ -2,8 +2,9 @@
 
 @foreach (var artist in Model)
 {
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <a class="link" data-url="@Url.Action("Artist", "Home", new { artist = artist })">@artist</a>
+    <li class="list-group-item d-flex justify-content-between align-items-center" 
+                data-url="@Url.Action("Artist", "Home", new { artist = artist })">
+        <a class="link">@artist</a>
         <div class="d-flex gap-2">
             <form method="post" 
                   data-ajax="true" data-ajax-method="post" 

@@ -67,7 +67,7 @@ namespace HiFiTelegramApp.Controllers
         {
             try
             {
-                await this._favoriteService.AddToFavoriteSongs(artist, name, songId);
+                await this._favoriteService.AddToFavoriteSongs(artist, name, songId, false);
             }
             catch (Exception ex)
             {

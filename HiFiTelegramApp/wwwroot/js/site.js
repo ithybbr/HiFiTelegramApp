@@ -6,8 +6,10 @@
                 loadAjax(this.dataset.url);
             });
         });
+    links();
 });
 function links() {
+    console.log('Setting up links');
     document.querySelectorAll('.link[data-url]')
         .forEach(link => {
             link.addEventListener('click', function () {
@@ -84,6 +86,7 @@ function loadAjax(url) {
                     row: data,
                     scrollId: 'scrollArea',
                     contentId: 'contentArea',
+                    blocks_in_cluster: 8,
                     callbacks: {
                         scrollingProgress: function (progress) {
                             if (!search && progress > 60 && progress !== 100) {
@@ -92,10 +95,27 @@ function loadAjax(url) {
                         }
                     }
                 });
+                // delegation for all clickable items that have data-url
+                const contentArea = document.getElementById('contentArea');
+
+                contentArea.addEventListener('click', function (e) {
+                    if (e.target.closest('button')) return;
+                    const el = e.target.closest('[data-url]'); // matches .link or .nav-link or any element with data-url
+                    if (!el || !contentArea.contains(el)) return;
+
+                    const url = el.dataset.url;
+                    if (!url) return;
+
+                    console.log('Delegated click on', url);
+                    e.preventDefault(); // if it's an <a> and you want to handle via AJAX
+                    loadAjax(url);
+                });
+
                 clusterize.clear();
                 appendClusterize("/Home/list");
             }
             else {
+                links();
             }
             try {
                 loadSearch();
@@ -104,7 +124,6 @@ function loadAjax(url) {
                 console.error('Error loading search functionality:', e);
             }
             loadFavorites();
-            links();
             hideSpinner();
         },
         failure: function (xhr, status, error) {
@@ -124,7 +143,6 @@ function appendClusterize(url) {
             var temp = $('<div>').html(data);
             var rows = temp.find('li').map(function () { return this.outerHTML; }).get();
             clusterize.append(rows);
-            links();
         },
         failure: function (xhr, status, error) {
             console.error('Error appending data:', status, error);
